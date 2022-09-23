@@ -1,2 +1,3 @@
 # BILL-SUN521.github.io
-create a blog
+这个仓库是用来创建个人博客的
+
