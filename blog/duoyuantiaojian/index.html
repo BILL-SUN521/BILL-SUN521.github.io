@@ -1763,14 +1763,14 @@
   <h1>多元正态的条件分布</h1>
 
 <h2 id="x-x_1x_2-x_2">求多元正态的条件分布<span class="arithmatex">\(X = (X_{(1)},X_{(2)}) <span class="arithmatex">\(在给定\)</span>X_{(2)}\)</span>的条件下：<a class="headerlink" href="#x-x_1x_2-x_2" title="Permanent link">&para;</a></h2>
-<p>$$
+<div class="arithmatex">\[
 \binom{X_{(1)}}{X_{(2)}} \sim N_{p} (\binom{\mu_{(1)}}{\mu_{(2)}},\binom{\Sigma_{11} \ \Sigma_{12}}{\Sigma_{21} \ \Sigma_{22}} )
-$$
-<span class="arithmatex">\(X_{(2)} \sim  N_{p2}(\mu_{(2)},\Sigma_{(2)})\)</span></p>
+\]</div>
+<p><span class="arithmatex">\(X_{(2)} \sim  N_{p2}(\mu_{(2)},\Sigma_{(2)})\)</span></p>
 <p><span class="arithmatex">\(X_{(1)} | X_{(2)} \sim N_{p1}(\mu_{(1)|(2)}, \Sigma_{(1)|(2)})\)</span></p>
-<p>有:
-<span class="arithmatex">\(\mu_{(1)|(2)} = \mu_{(1)} + \Sigma_{12}{\Sigma_{22}}^{-1} (x_{(2)} - \mu_{(2)})\)</span>
-$\Sigma_{(1)|(2)} = \Sigma_{11}-\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}) $</p>
+<p>有:</p>
+<p><span class="arithmatex">\(\mu_{(1)|(2)} = \mu_{(1)} + \Sigma_{12}{\Sigma_{22}}^{-1} (x_{(2)} - \mu_{(2)})\)</span></p>
+<p>$\Sigma_{(1)|(2)} = \Sigma_{11}-\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}) $</p>
 <p>证明：</p>
 <p>先对矩阵<span class="arithmatex">\(\Sigma\)</span>做如下初等变换:(消去非对角元素)</p>
 <div class="arithmatex">\[
