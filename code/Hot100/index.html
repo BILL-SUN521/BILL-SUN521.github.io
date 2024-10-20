@@ -1507,6 +1507,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      两数相加
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1753,6 +1762,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      两数相加
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1786,6 +1804,46 @@
             <span class="k">if</span> <span class="n">target</span> <span class="o">-</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">[</span><span class="n">dic</span><span class="p">[</span><span class="n">target</span> <span class="o">-</span> <span class="n">num</span><span class="p">],</span> <span class="n">i</span><span class="p">]</span>
             <span class="n">dic</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> 
+</code></pre></div>
+<h2 id="_2">两数相加<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>给你两个 <strong>非空</strong> 的链表，表示两个非负的整数。它们每位数字都是按照 <strong>逆序</strong> 的方式存储的，并且每个节点只能存储 <strong>一位</strong> 数字。</p>
+<p>请你将两个数相加，并以相同形式返回一个表示和的链表。</p>
+<p>你可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p>
+<div class="highlight"><span class="filename">twoSum.py</span><pre><span></span><code><span class="k">class</span> <span class="nc">ListNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">next</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="nb">next</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="c1"># l1 和 l2 为当前遍历的链表节点，carry 为进位，默认为 0</span>
+    <span class="k">def</span> <span class="nf">addTwoNumbers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l1</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">,</span> <span class="n">l2</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">,</span> <span class="n">carry</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="c1"># 检查递归边界：当 l1 和 l2 都为空时</span>
+        <span class="k">if</span> <span class="n">l1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">l2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># 如果还有进位，则创建一个新节点存储进位值；否则返回 None</span>
+            <span class="k">return</span> <span class="n">ListNode</span><span class="p">(</span><span class="n">carry</span><span class="p">)</span> <span class="k">if</span> <span class="n">carry</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1"># 如果 l1 当前节点为空，说明 l1 已经遍历完，直接将 l1 和 l2 交换</span>
+        <span class="k">if</span> <span class="n">l1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="p">,</span> <span class="n">l1</span>  <span class="c1"># 确保 l1 不为空，简化后续代码</span>
+
+        <span class="c1"># 将当前节点值和 l2 的值（如果存在）以及进位相加</span>
+        <span class="n">carry</span> <span class="o">+=</span> <span class="n">l1</span><span class="o">.</span><span class="n">val</span> <span class="o">+</span> <span class="p">(</span><span class="n">l2</span><span class="o">.</span><span class="n">val</span> <span class="k">if</span> <span class="n">l2</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># l2 为空时取 0</span>
+
+        <span class="c1"># 更新 l1 当前节点的值，保留个位数</span>
+        <span class="n">l1</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">carry</span> <span class="o">%</span> <span class="mi">10</span>  <span class="c1"># 当前节点的值为和的个位数</span>
+
+        <span class="c1"># 递归调用处理下一个节点，同时计算新的进位</span>
+        <span class="n">l1</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">addTwoNumbers</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">next</span><span class="p">,</span> <span class="n">l2</span><span class="o">.</span><span class="n">next</span> <span class="k">if</span> <span class="n">l2</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="n">carry</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># 进位为整除 10 的结果</span>
+
+        <span class="c1"># 返回更新后的 l1 链表</span>
+        <span class="k">return</span> <span class="n">l1</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">l1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">l2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">ListNode</span>
+<span class="n">l1</span> <span class="o">=</span> <span class="n">b</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">b</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+<span class="n">l2</span><span class="o">=</span> <span class="n">b</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">b</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">b</span><span class="p">(</span><span class="mi">4</span><span class="p">)))</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">Solution</span><span class="p">()</span>
+<span class="n">a</span><span class="o">.</span><span class="n">addTwoNumbers</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">)</span>
 </code></pre></div>
 
 
