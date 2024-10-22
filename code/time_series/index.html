@@ -12,28 +12,24 @@
         <meta name="author" content="sun">
       
       
-        <link rel="canonical" href="https://bill-sun521.github.io/code/">
+        <link rel="canonical" href="https://bill-sun521.github.io/code/time_series/">
       
       
-        <link rel="prev" href="../blog/duoyuantiaojian/">
       
       
-        <link rel="next" href="pandas/">
-      
-      
-      <link rel="icon" href="../img/favicon.ico">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.41">
     
     
       
-        <title>代码 - 我的个人博客(猜猜我是谁)</title>
+        <title>Time series - 我的个人博客(猜猜我是谁)</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.0253249f.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.0253249f.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -54,13 +50,13 @@
     
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
     
-      <link rel="stylesheet" href="../mkdocs/css/no-footer.css">
+      <link rel="stylesheet" href="../../mkdocs/css/no-footer.css">
     
-      <link rel="stylesheet" href="../mkdocs/css/unordered-list-symbols.css">
+      <link rel="stylesheet" href="../../mkdocs/css/unordered-list-symbols.css">
     
       <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -86,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#pivot_table" class="md-skip">
           跳转至
         </a>
       
@@ -120,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              代码
+              Time series
             
           </span>
         </div>
@@ -229,7 +225,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
     
@@ -248,7 +244,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../blog/" class="md-tabs__link">
+        <a href="../../blog/" class="md-tabs__link">
           
   
     
@@ -264,13 +260,11 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../" class="md-tabs__link">
           
   
     
@@ -290,7 +284,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../xiaolv/" class="md-tabs__link">
+        <a href="../../xiaolv/" class="md-tabs__link">
           
   
     
@@ -310,7 +304,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../about/" class="md-tabs__link">
+        <a href="../../about/" class="md-tabs__link">
           
   
     
@@ -375,7 +369,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -420,7 +414,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../blog/" class="md-nav__link ">
+            <a href="../../blog/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -453,7 +447,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../blog/duoyuantiaojian/" class="md-nav__link">
+      <a href="../../blog/duoyuantiaojian/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -478,8 +472,6 @@
       
   
   
-    
-  
   
   
     
@@ -522,22 +514,21 @@
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="./" class="md-nav__link md-nav__link--active">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -548,13 +539,13 @@
             </a>
             
               
-              <label class="md-nav__link md-nav__link--active" for="__nav_3" id="__nav_3_label" tabindex="">
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             代码
@@ -570,7 +561,7 @@
   
   
     <li class="md-nav__item">
-      <a href="pandas/" class="md-nav__link">
+      <a href="../pandas/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -591,7 +582,7 @@
   
   
     <li class="md-nav__item">
-      <a href="numpy/" class="md-nav__link">
+      <a href="../numpy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -612,7 +603,7 @@
   
   
     <li class="md-nav__item">
-      <a href="list/" class="md-nav__link">
+      <a href="../list/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -633,7 +624,7 @@
   
   
     <li class="md-nav__item">
-      <a href="loop/" class="md-nav__link">
+      <a href="../loop/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -654,7 +645,7 @@
   
   
     <li class="md-nav__item">
-      <a href="plot/" class="md-nav__link">
+      <a href="../plot/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -675,7 +666,7 @@
   
   
     <li class="md-nav__item">
-      <a href="print/" class="md-nav__link">
+      <a href="../print/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -696,7 +687,7 @@
   
   
     <li class="md-nav__item">
-      <a href="pachong/" class="md-nav__link">
+      <a href="../pachong/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -781,7 +772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="sl/" class="md-nav__link">
+      <a href="../sl/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -802,7 +793,7 @@
   
   
     <li class="md-nav__item">
-      <a href="ul/" class="md-nav__link">
+      <a href="../ul/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -823,7 +814,7 @@
   
   
     <li class="md-nav__item">
-      <a href="ssl/" class="md-nav__link">
+      <a href="../ssl/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -844,7 +835,7 @@
   
   
     <li class="md-nav__item">
-      <a href="tl/" class="md-nav__link">
+      <a href="../tl/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -865,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="el/" class="md-nav__link">
+      <a href="../el/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -886,7 +877,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dr/" class="md-nav__link">
+      <a href="../dr/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -907,7 +898,7 @@
   
   
     <li class="md-nav__item">
-      <a href="fs/" class="md-nav__link">
+      <a href="../fs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -928,7 +919,7 @@
   
   
     <li class="md-nav__item">
-      <a href="fe/" class="md-nav__link">
+      <a href="../fe/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -949,7 +940,7 @@
   
   
     <li class="md-nav__item">
-      <a href="me/" class="md-nav__link">
+      <a href="../me/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -970,7 +961,7 @@
   
   
     <li class="md-nav__item">
-      <a href="ms/" class="md-nav__link">
+      <a href="../ms/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -991,7 +982,7 @@
   
   
     <li class="md-nav__item">
-      <a href="mt/" class="md-nav__link">
+      <a href="../mt/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1074,7 +1065,7 @@
   
   
     <li class="md-nav__item">
-      <a href="NN/" class="md-nav__link">
+      <a href="../NN/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1095,7 +1086,7 @@
   
   
     <li class="md-nav__item">
-      <a href="CNN/" class="md-nav__link">
+      <a href="../CNN/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1116,7 +1107,7 @@
   
   
     <li class="md-nav__item">
-      <a href="RNN/" class="md-nav__link">
+      <a href="../RNN/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1137,7 +1128,7 @@
   
   
     <li class="md-nav__item">
-      <a href="GAN/" class="md-nav__link">
+      <a href="../GAN/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1158,7 +1149,7 @@
   
   
     <li class="md-nav__item">
-      <a href="transformers/" class="md-nav__link">
+      <a href="../transformers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1179,7 +1170,7 @@
   
   
     <li class="md-nav__item">
-      <a href="GM/" class="md-nav__link">
+      <a href="../GM/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1258,7 +1249,7 @@
   
   
     <li class="md-nav__item">
-      <a href="MDP/" class="md-nav__link">
+      <a href="../MDP/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1279,7 +1270,7 @@
   
   
     <li class="md-nav__item">
-      <a href="value/" class="md-nav__link">
+      <a href="../value/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1300,7 +1291,7 @@
   
   
     <li class="md-nav__item">
-      <a href="policy/" class="md-nav__link">
+      <a href="../policy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1321,7 +1312,7 @@
   
   
     <li class="md-nav__item">
-      <a href="MA/" class="md-nav__link">
+      <a href="../MA/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1350,7 +1341,7 @@
   
   
     <li class="md-nav__item">
-      <a href="LLM/" class="md-nav__link">
+      <a href="../LLM/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1371,7 +1362,7 @@
   
   
     <li class="md-nav__item">
-      <a href="sql/" class="md-nav__link">
+      <a href="../sql/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1392,7 +1383,7 @@
   
   
     <li class="md-nav__item">
-      <a href="r/" class="md-nav__link">
+      <a href="../r/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1459,7 +1450,7 @@
   
   
     <li class="md-nav__item">
-      <a href="DSA/" class="md-nav__link">
+      <a href="../DSA/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1480,7 +1471,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Hot100/" class="md-nav__link">
+      <a href="../Hot100/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1553,7 +1544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="git/" class="md-nav__link">
+      <a href="../git/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1612,7 +1603,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../xiaolv/" class="md-nav__link ">
+            <a href="../../xiaolv/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1670,7 +1661,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../about/" class="md-nav__link ">
+            <a href="../../about/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1715,8 +1706,23 @@
   
   
   
-    
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pivot_table" class="md-nav__link">
+    <span class="md-ellipsis">
+      pivot_table
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1731,87 +1737,120 @@
                   
 
 
-<h1 id="_1">代码<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>许多代码在学习和工作中经常使用，将它们记录并整理于此，方便查找与温习。</p>
-<div class="result">
-<div class="grid cards">
-<ul>
-<li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.922 0h2.623v18.104h-2.623zm-4.126 12.94h2.623v2.57h-2.623zm0-7.037h2.623v5.446h-2.623zm0 11.197h2.623v5.446h-2.623zM4.456 5.896h2.622V24H4.455zm4.213 2.559h2.623v2.57H8.67zm0 4.151h2.623v5.447H8.67zm0-11.187h2.623v5.446H8.67Z"/></svg></span> <strong>Pandas 数据框</strong></p>
-<hr />
-<p>表格数据的增删查改、分组统计、多重索引、日期格式等。</p>
-<p><a href="pandas/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10.315 4.876-4.01-2.024-4.401 2.196 4.118 2.068zm1.838.928 4.205 2.122-4.363 2.19L7.87 8.046zm5.615-2.922 4.32 2.166-3.863 1.94-4.213-2.125zM15.91 1.95 12.021 0 8.174 1.92l4.007 2.02zm-3.04 16.744V24l4.711-2.35-.005-5.31zm4.704-4.206-.005-5.253-4.699 2.336v5.254zm5.655-.984v5.327l-4.018 2.005-.002-5.303zm0-1.863v-5.22l-4.025 2.001.003 5.264zm-12.022-.07L8.033 9.976v6.895s-3.88-8.257-4.24-8.998c-.046-.096-.237-.201-.285-.227A358 358 0 0 0 .773 6.25V18.43l2.82 1.508V13.57s3.84 7.378 3.878 7.458c.04.08.425.858.837 1.132.548.363 2.899 1.776 2.899 1.776z"/></svg></span> <strong>NumPy 数组</strong></p>
-<hr />
-<p>向量、矩阵的创建、切片、排序等。</p>
-<p><a href="numpy/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 4v2h3v12h-3v2h5V4M4 4v16h5v-2H6V6h3V4z"/></svg></span> <strong>List 列表</strong></p>
-<hr />
-<p>列表的筛选、添加、拼接、展平等。</p>
-<p><a href="list/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12c.011-6.629-5.371-12-12-12m.7 22.611C6.837 22.611 2.089 17.863 2.089 12S6.837 1.389 12.7 1.389 23.311 6.137 23.311 12 18.563 22.611 12.7 22.611M7.045 3.413C2.298 6.148.679 12.208 3.413 16.955c2.735 4.737 8.806 6.366 13.542 3.632 4.747-2.735 6.366-8.806 3.632-13.542C17.852 2.297 11.792.678 7.045 3.413m9.823 15.621a8.524 8.524 0 0 1-11.639-3.118A8.524 8.524 0 0 1 8.347 4.277a8.524 8.524 0 0 1 11.639 3.118c2.351 4.069.962 9.287-3.118 11.639M5.229 8.084c-2.166 3.741-.875 8.532 2.866 10.687 3.741 2.166 8.532.875 10.698-2.866s.875-8.532-2.866-10.687c-3.752-2.155-8.543-.875-10.698 2.866m12.842 6.618a6.603 6.603 0 0 1-9.025 2.417c-3.161-1.827-4.244-5.863-2.418-9.025s5.863-4.244 9.025-2.418c3.162 1.817 4.245 5.865 2.418 9.026M6.093 12c0 3.271 2.647 5.918 5.918 5.918s5.918-2.647 5.918-5.918-2.647-5.918-5.918-5.918A5.915 5.915 0 0 0 6.093 12m10.611-.7c0 2.593-2.1 4.693-4.693 4.693s-4.693-2.1-4.693-4.693 2.1-4.693 4.693-4.693c2.582 0 4.693 2.1 4.693 4.693"/></svg></span> <strong>Loop 循环</strong></p>
-<hr />
-<p>显示循环进度条、逐对循环、遍历路径等。</p>
-<p><a href="loop/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.75 20.85c1.78-.7 1.39-2.63.49-3.85-.89-1.25-2.12-2.11-3.36-2.94A9.8 9.8 0 0 1 4.54 12c-.28-.33-.85-.94-.27-1.06.59-.12 1.61.46 2.13.68.91.38 1.81.82 2.65 1.34l1.01-1.7C8.5 10.23 6.5 9.32 4.64 9.05c-1.06-.16-2.18.06-2.54 1.21-.32.99.19 1.99.77 2.77 1.37 1.83 3.5 2.71 5.09 4.29.34.33.75.72.95 1.18.21.44.16.47-.31.47-1.24 0-2.79-.97-3.8-1.61l-1.01 1.7c1.53.94 4.09 2.41 5.96 1.79m11.09-15.6c.22-.22.22-.58 0-.79l-1.3-1.3a.56.56 0 0 0-.78 0l-1.02 1.02 2.08 2.08M11 10.92V13h2.08l6.15-6.15-2.08-2.08z"/></svg></span> <strong>Plot 绘图</strong></p>
-<hr />
-<p>常用的绘图代码。</p>
-<p><a href="plot/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 3H6v4h12m1 5a1 1 0 0 1-1-1 1 1 0 0 1 1-1 1 1 0 0 1 1 1 1 1 0 0 1-1 1m-3 7H8v-5h8m3-6H5a3 3 0 0 0-3 3v6h4v4h12v-4h4v-6a3 3 0 0 0-3-3"/></svg></span> <strong>Print 打印</strong></p>
-<hr />
-<p>整齐地打印、将内容写入文件等。</p>
-<p><a href="print/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><img alt="Ⓜ" class="twemoji lg middle" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/24c2.svg" title=":m:" /> <strong>Machine Learning 机器学习</strong></p>
-<hr />
-<p>常用的机器学习代码。</p>
-<p><a href="ml.md"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4M4 9v3c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4s-8-1.79-8-4m0 5v3c0 2.21 3.58 4 8 4s8-1.79 8-4v-3c0 2.21-3.58 4-8 4s-8-1.79-8-4"/></svg></span> <strong>SQL 数据库</strong></p>
-<hr />
-<p>常用的 SQL 代码。</p>
-<p><a href="sql/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.746c-6.627 0-12 3.599-12 8.037 0 3.897 4.144 7.144 9.64 7.88V16.26c-2.924-.915-4.925-2.755-4.925-4.877 0-3.035 4.084-5.494 9.12-5.494 5.038 0 8.757 1.683 8.757 5.494 0 1.976-.999 3.379-2.662 4.272.09.066.174.128.258.216.169.149.25.363.372.544 2.128-1.45 3.44-3.437 3.44-5.631 0-4.44-5.373-8.038-12-8.038m-2.111 4.99v13.516l4.093-.002-.002-5.291h1.1c.225 0 .321.066.549.25.272.22.715.982.715.982l2.164 4.063 4.627-.002-2.864-4.826s-.086-.193-.265-.383a2.2 2.2 0 0 0-.582-.416c-.422-.214-1.149-.434-1.149-.434s3.578-.264 3.578-3.826-3.744-3.63-3.744-3.63zm4.127 2.93 2.478.002s1.149-.062 1.149 1.127c0 1.165-1.149 1.17-1.149 1.17h-2.478zm1.754 6.119c-.494.049-1.012.079-1.54.088v1.807a17 17 0 0 0 2.37-.473l-.471-.891s-.108-.183-.248-.394c-.039-.054-.08-.098-.111-.137"/></svg></span> <strong>R 语言</strong></p>
-<hr />
-<p>常用的 R语言 代码。</p>
-<p><a href="r/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.383.3s-.717 1.14-1.798 2.931l-6.274-.035a73 73 0 0 0-.353-2.74L8.05.59q.205 1.405.337 2.6h-.02a.52.52 0 0 0-.412.198l-4.377 5.48c-2.193.054-3.49-.07-3.49-.07L0 9.714s1.212.116 3.27.08l1.434 6.47c-1.812 1.535-3.169 2.362-3.169 2.362l.477.784s1.281-.779 3.024-2.225a.5.5 0 0 0 .086.053l6.6 3.249c-.01 2.007.058 3.214.058 3.214l.917-.052s-.07-1.265-.056-3.356l6.218-2.978a.53.53 0 0 0 .215-.19l.245.243c1.149 1.118 1.93 1.598 1.93 1.598l.477-.784s-.67-.406-1.767-1.472a19 19 0 0 1-.612-.623l1.422-6.16A116 116 0 0 1 24 8.718l-.306-.866s-1.224.434-3.162 1.183l-4.166-5.322A201 201 0 0 1 18.16.79zM9.419 4.256l5.532.032c-.586.981-1.237 2.09-1.932 3.297l-3.368.597a52 52 0 0 0-.232-3.926m-.91.13c.192 2.06.225 3.46.23 4.087a52 52 0 0 1-3.766.339zm7.276.294 3.343 4.27a1.8 1.8 0 0 0-.656.086c-.451.14-.857.405-1.22.768q-.36.36-.582.776-.566.234-1.165.485l-1.64-3.109c.692-1.2 1.34-2.304 1.92-3.276m-2.666 3.824 1.68 3.184-.75.783a1 1 0 0 1-.122-.102l-1.313-1.313-1.418-1.417a2.9 2.9 0 0 0-.943-.627zM6.984 9.586l-.05.048-2.147 2.147-.448-2.02c.795-.032 1.68-.087 2.645-.175m2.418.958c.22.051.418.158.576.313l1.312 1.313 1.418 1.418q.07.07.143.134l-.534.557-3.214-1.582zm-.938.091-.31 2.247c-.86.98-1.732 1.847-2.549 2.59l-.465-2.1.247.247 2.766-2.766a1.2 1.2 0 0 1 .311-.218m7.934 1.05.004.038-.232.232-.087-.137zm2.724.696-.634 2.743c-.42-.5-.873-1.071-1.334-1.715l.502-.503c.22.009.437-.028.625-.086.3-.093.58-.243.841-.439m-3.747.033.1.159a1.3 1.3 0 0 1-.374.126zM8.78 13.563l3.136 1.544a89 89 0 0 0-.178 4.207L5.9 16.44a34 34 0 0 0 2.879-2.877zm7.67.437a28 28 0 0 0 1.782 2.228l-.054.237-5.521 2.644c.025-1.18.078-2.547.18-4.047l.813-.85a3.16 3.16 0 0 0 2.8-.212"/></svg></span> <strong>爬虫</strong></p>
-<hr />
-<p>利用python和浏览器插件进行网络爬虫的工具。</p>
-<p><a href="pachong/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><img alt="⚙" class="twemoji lg middle" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2699.svg" title=":gear:" /> <strong>Others 其他</strong></p>
-<hr />
-<p>字典与字符串的操作、Git 命令、Conda 命令、正则表达式等。</p>
-<p><a href="others/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a></p>
-</li>
-<li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 8c-1.5 0-2.3 1.4-1.9 2.5l-3.6 3.6c-.3-.1-.7-.1-1 0l-2.6-2.6c.4-1.1-.4-2.5-1.9-2.5-1.4 0-2.3 1.4-1.9 2.5L3.5 16c-1.1-.3-2.5.5-2.5 2 0 1.1.9 2 2 2 1.4 0 2.3-1.4 1.9-2.5l4.5-4.6c.3.1.7.1 1 0l2.6 2.6c-.3 1 .5 2.5 2 2.5s2.3-1.4 1.9-2.5l3.6-3.6c1.1.3 2.5-.5 2.5-1.9 0-1.1-.9-2-2-2m-6 1 .9-2.1L18 6l-2.1-.9L15 3l-.9 2.1L12 6l2.1.9zM3.5 11 4 9l2-.5L4 8l-.5-2L3 8l-2 .5L3 9z"/></svg></span> <strong>Time Series 时间序列</strong></p>
-<hr />
-<p>记录pandas对时间序列的操作。</p>
-<p><a href="time_series/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> 查看</a>  <br />
-</p>
-</li>
-</ul>
-</div>
-</div>
+  <h1>Time series</h1>
+
+<h2 id="pivot_table">pivot_table<a class="headerlink" href="#pivot_table" title="Permanent link">&para;</a></h2>
+<p><code>pandas</code> 包中的 <code>pivot_table</code> 函数是一个非常强大和灵活的工具，用于在 DataFrame 上执行数据的透视和汇总操作。它通常用于数据聚合和重塑，可以根据指定的行和列进行数据的分组、汇总，并应用聚合函数（如求和、平均值等）。</p>
+<p>pivot_table 函数的主要用途
+透视表：类似于 Excel 中的透视表，pivot_table 用于根据某些维度进行数据的分组、聚合和重新排列。
+数据聚合：对数据进行汇总操作，如求和、平均、计数等。</p>
+<p>基本语法</p>
+<div class="highlight"><pre><span></span><code><span class="n">pandas</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">margins</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">margins_name</span><span class="o">=</span><span class="s1">&#39;All&#39;</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>主要参数说明:
+data：DataFrame，需要进行透视操作的数据集。</p>
+<p>values：指定需要汇总的列，通常是数值列。可以传入一个或多个列名（list）。</p>
+<p>index：用于分组的行标签（行索引）。可以传入一个或多个列名（list）。</p>
+<p>columns：用于分组的列标签（列索引）。可以传入一个或多个列名（list）。</p>
+<p>aggfunc：指定用于数据聚合的函数，默认是 'mean'，即求均值。可以传入字符串函数名称（如 'sum'、'count' 等）或者函数（如 np.sum、np.mean 等）。</p>
+<p>fill_value：在结果中用来替换 NaN 的值，通常用于填充缺失值。</p>
+<p>margins：布尔值，是否添加行和列的汇总统计（类似于 Excel 中的 "总计"）。</p>
+<p>margins_name：设置汇总统计行/列的名称，默认为 'All'。</p>
+<p>dropna：是否丢弃含有 NaN 值的列。</p>
+<p>observed：仅在分组是 Categorical 类型时有用，表示是否只显示在数据中观察到的分类。</p>
+<p>示例:</p>
+<p>假设有以下数据集 df：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Category&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Subcategory&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Sales&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">350</span><span class="p">],</span>
+    <span class="s1">&#39;Profit&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</code></pre></div>
+<p>输出：</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">Category</span><span class="w"> </span><span class="nt">Subcategory</span><span class="w">  </span><span class="nt">Sales</span><span class="w">  </span><span class="nt">Profit</span>
+<span class="nt">0</span><span class="w">        </span><span class="nt">A</span><span class="w">           </span><span class="nt">X</span><span class="w">    </span><span class="nt">100</span><span class="w">      </span><span class="nt">20</span>
+<span class="nt">1</span><span class="w">        </span><span class="nt">A</span><span class="w">           </span><span class="nt">Y</span><span class="w">    </span><span class="nt">150</span><span class="w">      </span><span class="nt">30</span>
+<span class="nt">2</span><span class="w">        </span><span class="nt">B</span><span class="w">           </span><span class="nt">X</span><span class="w">    </span><span class="nt">200</span><span class="w">      </span><span class="nt">40</span>
+<span class="nt">3</span><span class="w">        </span><span class="nt">B</span><span class="w">           </span><span class="nt">Y</span><span class="w">    </span><span class="nt">250</span><span class="w">      </span><span class="nt">50</span>
+<span class="nt">4</span><span class="w">        </span><span class="nt">C</span><span class="w">           </span><span class="nt">X</span><span class="w">    </span><span class="nt">300</span><span class="w">      </span><span class="nt">60</span>
+<span class="nt">5</span><span class="w">        </span><span class="nt">C</span><span class="w">           </span><span class="nt">Y</span><span class="w">    </span><span class="nt">350</span><span class="w">      </span><span class="nt">70</span>
+</code></pre></div>
+<ol>
+<li>基本使用
+我们可以创建一个简单的透视表，汇总每个 Category 和 Subcategory 的销售总额。</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">pivot</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;Sales&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;Category&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Subcategory&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pivot</span><span class="p">)</span>
+</code></pre></div>
+<p>输出：</p>
+<div class="highlight"><pre><span></span><code><span class="nt">复制代码</span>
+<span class="nt">Subcategory</span><span class="w">     </span><span class="nt">X</span><span class="w">      </span><span class="nt">Y</span>
+<span class="nt">Category</span><span class="w">               </span>
+<span class="nt">A</span><span class="w">             </span><span class="nt">100</span><span class="w">    </span><span class="nt">150</span>
+<span class="nt">B</span><span class="w">             </span><span class="nt">200</span><span class="w">    </span><span class="nt">250</span>
+<span class="nt">C</span><span class="w">             </span><span class="nt">300</span><span class="w">    </span><span class="nt">350</span>
+</code></pre></div>
+<p>这里，Category 是行索引，Subcategory 是列索引，Sales 列被汇总为销售总额。</p>
+<ol>
+<li>使用多个聚合函数
+你可以为 aggfunc 参数传入多个聚合函数。例如，同时计算销售的总和和均值：</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">pivot</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;Sales&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;Category&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Subcategory&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pivot</span><span class="p">)</span>
+</code></pre></div>
+<p>输出：</p>
+<div class="highlight"><pre><span></span><code><span class="w">            </span><span class="nt">sum</span><span class="w">         </span><span class="nt">mean</span><span class="w">      </span>
+<span class="nt">Subcategory</span><span class="w">   </span><span class="nt">X</span><span class="w">    </span><span class="nt">Y</span><span class="w">       </span><span class="nt">X</span><span class="w">      </span><span class="nt">Y</span>
+<span class="nt">Category</span><span class="w">                            </span>
+<span class="nt">A</span><span class="w">           </span><span class="nt">100</span><span class="w">  </span><span class="nt">150</span><span class="w">    </span><span class="nt">100</span><span class="p">.</span><span class="nc">0</span><span class="w">  </span><span class="nt">150</span><span class="p">.</span><span class="nc">0</span>
+<span class="nt">B</span><span class="w">           </span><span class="nt">200</span><span class="w">  </span><span class="nt">250</span><span class="w">    </span><span class="nt">200</span><span class="p">.</span><span class="nc">0</span><span class="w">  </span><span class="nt">250</span><span class="p">.</span><span class="nc">0</span>
+<span class="nt">C</span><span class="w">           </span><span class="nt">300</span><span class="w">  </span><span class="nt">350</span><span class="w">    </span><span class="nt">300</span><span class="p">.</span><span class="nc">0</span><span class="w">  </span><span class="nt">350</span><span class="p">.</span><span class="nc">0</span>
+</code></pre></div>
+<p>现在表中显示了每个 Category 和 Subcategory 的销售总和和均值。</p>
+<ol>
+<li>同时聚合多个列
+可以对 Sales 和 Profit 同时进行聚合：</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">pivot</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Sales&#39;</span><span class="p">,</span> <span class="s1">&#39;Profit&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;Category&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pivot</span><span class="p">)</span>
+</code></pre></div>
+<p>输出：</p>
+<p><div class="highlight"><pre><span></span><code><span class="nt">Category</span><span class="w">    </span><span class="nt">Profit</span><span class="w">  </span><span class="nt">Sales</span><span class="w">             </span>
+<span class="nt">A</span><span class="w">              </span><span class="nt">50</span><span class="w">    </span><span class="nt">250</span>
+<span class="nt">B</span><span class="w">              </span><span class="nt">90</span><span class="w">    </span><span class="nt">450</span>
+<span class="nt">C</span><span class="w">             </span><span class="nt">130</span><span class="w">    </span><span class="nt">650</span>
+</code></pre></div>
+这里，Sales 和 Profit 两列被分别汇总为每个类别的总和。</p>
+<ol>
+<li>填充缺失值（fill_value 参数）
+在某些情况下，透视表中可能会出现 NaN 值。你可以使用 fill_value 参数来填充这些缺失值。例如，将缺失值填充为 0：</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">pivot</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;Sales&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;Category&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Subcategory&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pivot</span><span class="p">)</span>
+</code></pre></div>
+<ol>
+<li>添加总计行/列（margins 参数）
+你可以添加总计行和列来显示各组的汇总统计：</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">pivot</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;Sales&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;Category&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Subcategory&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">margins</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">margins_name</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pivot</span><span class="p">)</span>
+</code></pre></div>
+<p>输出：</p>
+<div class="highlight"><pre><span></span><code><span class="n">Subcategory</span><span class="w">     </span><span class="n">X</span><span class="w">      </span><span class="n">Y</span><span class="w">  </span><span class="n">Total</span>
+<span class="n">Category</span><span class="w">                         </span>
+<span class="n">A</span><span class="w">             </span><span class="mi">100</span><span class="w">    </span><span class="mi">150</span><span class="w">    </span><span class="mi">250</span>
+<span class="n">B</span><span class="w">             </span><span class="mi">200</span><span class="w">    </span><span class="mi">250</span><span class="w">    </span><span class="mi">450</span>
+<span class="n">C</span><span class="w">             </span><span class="mi">300</span><span class="w">    </span><span class="mi">350</span><span class="w">    </span><span class="mi">650</span>
+<span class="n">Total</span><span class="w">         </span><span class="mi">600</span><span class="w">    </span><span class="mi">750</span><span class="w">   </span><span class="mi">1350</span>
+</code></pre></div>
+<p>margins=True 会添加一行和一列来显示总计汇总值，margins_name 参数用于自定义总计行的名称。</p>
+<p>总结
+pivot_table 是一个灵活的工具，适用于多维度的数据聚合和重塑。它允许你根据行和列进行分组，并使用多种聚合函数来处理数据。此外，它还支持填充缺失值、添加汇总行和列等功能，是数据分析和处理过程中非常实用的工具。</p>
 
 
 
@@ -1868,12 +1907,12 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.top", "navigation.indexes", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.indexes", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
       
-        <script src="../javascripts/katex.js"></script>
+        <script src="../../javascripts/katex.js"></script>
       
         <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
       
