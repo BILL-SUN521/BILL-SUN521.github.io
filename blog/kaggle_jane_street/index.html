@@ -397,6 +397,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
       
@@ -452,6 +458,69 @@
   
   <span class="md-ellipsis">
     多元正态的条件分布
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BD%BF%E7%94%A8%20joblib%20%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 joblib 实现简单的并行计算
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Kaggle_GPU.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kaggle自带GPU的情况调查
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../baidu_pa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Selenium 库和百度
   </span>
   
 
@@ -1716,7 +1785,16 @@
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
-      数据集说明
+      概览
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
     </span>
   </a>
   
@@ -1725,9 +1803,66 @@
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
+      评估规则
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="评估规则">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      提交文件
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      数据集说明
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
       竞赛阶段和数据更新
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discussion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Discussion
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Discussion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      导入数据节约时间和资源的小技巧：
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1748,10 +1883,23 @@
 
   <h1>Kaggle jane street</h1>
 
-<h2 id="_1">数据集说明<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_1">概览<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>在这场由 Jane Street 主办的比赛中，您将利用从生产系统中获得的真实数据建立一个模型，从而了解成功交易的日常挑战。 
+这项挑战凸显了金融市场建模的困难，包括胖尾分布、非平稳时间序列和市场行为的突然转变。</p>
+<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
+<p>在处理现代金融市场的建模问题时，有很多理由让人相信你试图解决的问题是不可能的。即使撇开金融工具的价格理性地反映了所有可用信息这一信念不谈，你也不得不处理时间序列和分布问题，而这些问题的特性是你在其他类型的建模问题中不会遇到的。分布可能是著名的肥尾分布，时间序列可能是非平稳的，而且数据可能通常不满足很多成功的统计方法所依赖的基本假设。此外，金融市场归根结底是人类的活动，涉及大量个人和机构，这些个人和机构随着技术进步和社会变迁而不断变化，并对出现的经济和地缘政治问题做出反应，因此您可以开始了解其中的困难！</p>
+<p>在这项挑战中，我们要求您利用从我们的一些生产系统中获得的真实数据建立一个模型。这些数据非常贴切地反映了我们每天为在现代金融市场中成功交易而必须做的一些事情。我们收集了与我们运行自动交易策略的市场相关的特征和响应变量，并关注是否拥有良好的基础模型。为了既能解决与我们业务相关的挑战性问题，又能尊重我们交易的专有性和高度竞争性，您会注意到我们对数据中的一些特征和响应者进行了匿名和轻度模糊化处理。这些修改并没有改变当前问题的本质，但却使我们能够为您提供一项艰巨的任务，有意义地说明我们在 Jane Street 所做的工作。</p>
+<p>Jane Street 数十年来一直坚持不懈地在交易的各个方面进行创新，并建立机器学习模型来帮助我们做出决策。这些模型帮助我们每天在全球 200 多个交易场所积极交易数千种金融产品。虽然这项挑战只是 Jane Street 员工日常工作中定量问题的一小部分，但我们非常有兴趣了解 Kaggle 社区将如何应对这项挑战，并与您一起探讨您的问题解决方案！</p>
+<h2 id="_2">评估规则<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>对提交的信息进行评估的评分函数定义为 responder_6 的样本加权零均值 R 平方得分 (R2)。计算公式如下：</p>
+<div class="arithmatex">\[\mathrm{R}^2=1-\frac{\sum w_i(y_i-\hat{y_i})^2}{\sum w_iy_i^2},\]</div>
+<p>其中 <span class="arithmatex">\(y_i\)</span> 是第 <span class="arithmatex">\(i\)</span> 个样本的响应变量，<span class="arithmatex">\(\hat{y_i}\)</span> 是预测值，<span class="arithmatex">\(w_i\)</span> 是第 <span class="arithmatex">\(i\)</span> 个样本的权重。</p>
+<h3 id="_3">提交文件<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>提交文件 您必须使用所提供的评估 API 提交参赛作品，以确保模型不会在时间上向前推移。 更多详情，请参阅<a href="https://www.kaggle.com/code/ryanholbrook/jane-street-rmf-demo-submission">本示例笔记本</a>。</p>
+<h2 id="_4">数据集说明<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>竞赛数据集由一组包含 79 个特征和 9 个响应变量 的时间序列组成，这些数据虽已匿名，但代表了真实的市场数据。比赛的目标是预测其中一个响应者（即 responder_6）未来最长 6 个月的走势。</p>
 <p>您必须使用所提供的 Python 评估 API 提交比赛，该 API 按时间顺序提供测试集数据。要使用 API，请按照本手册中的示例操作。(请注意，该 API 与我们在以往预测竞赛中使用的传统时序 API 不同）。</p>
-<h2 id="_2">竞赛阶段和数据更新<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_5">竞赛阶段和数据更新<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>根据预测任务，竞赛将分两个阶段进行： </p>
 <ol>
 <li>使用历史数据测试集的模型训练阶段。该测试集约有 450 万行。</li>
@@ -1763,6 +1911,20 @@
 <p>为了帮助您撰写稳健的报告，在模型训练阶段的最后几周，我们将扩展公共测试集，使其包含更接近报告提交截止日期的数据。该扩展集上的预测将不计分。</p>
 <p>在预测阶段开始时，未评分的公共测试集将延长至模型训练阶段的最后一天，私人测试集大约每两周更新一次。每次更新时都将重新评分。</p>
 <p>在预测阶段，评估 API 将提供从公共测试集开始到私有测试集结束的测试数据。您必须在每个时间步进行预测，但在此阶段，只有对私有集的预测进行评分。(如果您愿意，可以对未计分的片段进行 0.0 预测）。</p>
+<h2 id="discussion">Discussion<a class="headerlink" href="#discussion" title="Permanent link">&para;</a></h2>
+<h3 id="_6">导入数据节约时间和资源的小技巧：<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>这里的训练数据集分为 10 个部分，每个部分有 1 个 parquet 文件。 大多数使用 pandas 的人会倾向于在一个循环中手动提供文件夹路径，并按顺序导入文件。 但在这里不需要这样做，因为 polars 会自动完成这项工作。 只需使用下面的代码，就可以一次性读入所有相关文件：</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">polars</span> <span class="k">as</span> <span class="nn">pl</span>
+<span class="n">train</span> <span class="o">=</span> \
+<span class="n">pl</span><span class="o">.</span><span class="n">scan_parquet</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;/kaggle/input/jane-street-real-time-market-data-forecasting/train.parquet&quot;</span>
+<span class="p">)</span><span class="o">.</span>\
+<span class="n">select</span><span class="p">(</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">int_range</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">len</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">UInt64</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+<span class="p">)</span>
+</code></pre></div>
+Polars 会自动扫描目录路径，一次性读入 10 个文件。 然后，可以使用 partition_id 列根据自己的需要过滤惰性数据框。</p>
 <p>```py title = "demo.py"
 import pyarrow as pa
 from pyarrow import csv
