@@ -15,6 +15,10 @@
         <link rel="canonical" href="https://bill-sun521.github.io/blog/kaggle_GPU/">
       
       
+        <link rel="prev" href="../%E4%BD%BF%E7%94%A8%20joblib%20%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/">
+      
+      
+        <link rel="next" href="../baidu_pa/">
       
       
       <link rel="icon" href="../../img/favicon.ico">
@@ -22,7 +26,7 @@
     
     
       
-        <title>kaggle GPU - 我的个人博客(猜猜我是谁)</title>
+        <title>Kaggle自带GPU的情况调查 - 我的个人博客(猜猜我是谁)</title>
       
     
     
@@ -111,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              kaggle GPU
+              Kaggle自带GPU的情况调查
             
           </span>
         </div>
@@ -235,10 +239,12 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../" class="md-tabs__link">
           
   
@@ -381,6 +387,8 @@
       
   
   
+    
+  
   
   
     
@@ -401,16 +409,17 @@
     
     
       
+        
+        
+      
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           
@@ -426,13 +435,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             博客
@@ -487,10 +496,17 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../Kaggle_GPU.md" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -499,6 +515,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -1784,7 +1801,7 @@
                   
 
 
-  <h1>kaggle GPU</h1>
+  <h1>Kaggle自带GPU的情况调查</h1>
 
 <p><strong>省流：不聊内存和硬盘，没我家里的好用，一堆20年的破铜烂铁</strong></p>
 <p>T4和P100是NVIDIA推出的两种不同型号的GPU，它们都基于不同的架构。为了了解它们之间的算力关系，我们可以参考它们在不同精度数据类型下的理论算力值。</p>
