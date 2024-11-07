@@ -85,6 +85,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#sql" class="md-skip">
+          跳转至
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -408,6 +413,8 @@
       
         
       
+        
+      
     
     
       
@@ -568,6 +575,27 @@
   
   <span class="md-ellipsis">
     异常检测算法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blog/%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    jupyter 的 魔法函数
   </span>
   
 
@@ -1487,6 +1515,19 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    SQL 数据库
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -1497,6 +1538,319 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      单表查询
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="单表查询">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#select" class="md-nav__link">
+    <span class="md-ellipsis">
+      SELECT
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where" class="md-nav__link">
+    <span class="md-ellipsis">
+      WHERE 筛选
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distinct" class="md-nav__link">
+    <span class="md-ellipsis">
+      DISTINCT：提取唯一值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in" class="md-nav__link">
+    <span class="md-ellipsis">
+      IN：等于多个值中的一个
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#between" class="md-nav__link">
+    <span class="md-ellipsis">
+      BETWEEN：介于两者之间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#like" class="md-nav__link">
+    <span class="md-ellipsis">
+      LIKE：筛选字符串
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regexp" class="md-nav__link">
+    <span class="md-ellipsis">
+      REGEXP: 正则表达式筛选字符串
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#substring" class="md-nav__link">
+    <span class="md-ellipsis">
+      SUBSTRING：从一个字符串中提取一个子字符串
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#concat" class="md-nav__link">
+    <span class="md-ellipsis">
+      CONCAT()：连接两个或多个字符串
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      IS NULL：筛选空值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order-by" class="md-nav__link">
+    <span class="md-ellipsis">
+      ORDER BY：排序
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      LIMIT：取前几条数据
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      连接
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="连接">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inner-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      INNER JOIN：内连接
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      从不同的数据库中跨表连接
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      将同一张表当作两张表进行连接（自身连接）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outer-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      OUTER JOIN：外连接
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using" class="md-nav__link">
+    <span class="md-ellipsis">
+      USING：列名相同时只需指定一个列名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      CROSS JOIN：交叉连接，也叫笛卡尔乘积
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#union" class="md-nav__link">
+    <span class="md-ellipsis">
+      UNION：上下连接
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      函数
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="函数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      聚合函数
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      插入数据
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="插入数据">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      数据属性
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#insert" class="md-nav__link">
+    <span class="md-ellipsis">
+      INSERT：插入数据
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      一次插入多行
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      将整个表插入到另外的表
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      更新数据
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      删除数据
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1833,6 +2187,310 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      单表查询
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="单表查询">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#select" class="md-nav__link">
+    <span class="md-ellipsis">
+      SELECT
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where" class="md-nav__link">
+    <span class="md-ellipsis">
+      WHERE 筛选
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distinct" class="md-nav__link">
+    <span class="md-ellipsis">
+      DISTINCT：提取唯一值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in" class="md-nav__link">
+    <span class="md-ellipsis">
+      IN：等于多个值中的一个
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#between" class="md-nav__link">
+    <span class="md-ellipsis">
+      BETWEEN：介于两者之间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#like" class="md-nav__link">
+    <span class="md-ellipsis">
+      LIKE：筛选字符串
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regexp" class="md-nav__link">
+    <span class="md-ellipsis">
+      REGEXP: 正则表达式筛选字符串
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#substring" class="md-nav__link">
+    <span class="md-ellipsis">
+      SUBSTRING：从一个字符串中提取一个子字符串
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#concat" class="md-nav__link">
+    <span class="md-ellipsis">
+      CONCAT()：连接两个或多个字符串
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      IS NULL：筛选空值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order-by" class="md-nav__link">
+    <span class="md-ellipsis">
+      ORDER BY：排序
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      LIMIT：取前几条数据
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      连接
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="连接">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inner-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      INNER JOIN：内连接
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      从不同的数据库中跨表连接
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      将同一张表当作两张表进行连接（自身连接）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outer-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      OUTER JOIN：外连接
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using" class="md-nav__link">
+    <span class="md-ellipsis">
+      USING：列名相同时只需指定一个列名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      CROSS JOIN：交叉连接，也叫笛卡尔乘积
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#union" class="md-nav__link">
+    <span class="md-ellipsis">
+      UNION：上下连接
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      函数
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="函数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      聚合函数
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      插入数据
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="插入数据">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      数据属性
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#insert" class="md-nav__link">
+    <span class="md-ellipsis">
+      INSERT：插入数据
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      一次插入多行
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      将整个表插入到另外的表
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      更新数据
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      删除数据
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1847,11 +2505,314 @@
                   
 
 
-  <h1>SQL 数据库</h1>
+<h1 id="sql">SQL 数据库<a class="headerlink" href="#sql" title="Permanent link">&para;</a></h1>
+<p>!!! abstract <strong>Cheat Sheet</strong></p>
+<pre><code>[Mosh Cheat Sheet](https://codewithmosh.com/)
+[LearnSQL.com Cheat Sheet](https://learnsql.com/blog/ultimate-sql-cheat-sheet/All-sql-cheat-sheet-a4.pdf)
+</code></pre>
+<h2 id="_1">单表查询<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="select"><code>SELECT</code><a class="headerlink" href="#select" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">name</span>
+<span class="w">    </span><span class="n">price</span>
+<span class="w">    </span><span class="n">price</span><span class="o">*</span><span class="mi">0</span><span class="p">.</span><span class="mi">9</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s1">&#39;discouted price&#39;</span>
+<span class="k">FROM</span>
+<span class="w">    </span><span class="n">tablename</span>
+<span class="k">WHERE</span>
+<span class="w">    </span><span class="k">NOT</span><span class="w"> </span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="p">(</span><span class="n">price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">city</span><span class="o">=</span><span class="n">Shanghai</span><span class="p">))</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span>
+<span class="w">    </span><span class="n">name</span>
+</code></pre></div>
+<ul>
+<li><code>SQL</code>语句不区分大小写，即<code>SELECT</code>、<code>Select</code>、<code>select</code>是同样的。但建议关键词用大写，方便阅读，让代码更规范。</li>
+<li>可以在1中做算术运算，生成新的列，并用1自定义列名。</li>
+<li><code>WHERE</code>用于筛选。其中，<code>AND</code>的优先级比<code>OR</code>高。也就是说，<code>age &lt; 10 OR price &gt; 100 AND city=Shanghai</code>相当于<code>age &lt; 10 OR (price &gt; 100 AND city=Shanghai)</code>。</li>
+</ul>
+<h3 id="where"><code>WHERE</code> 筛选<a class="headerlink" href="#where" title="Permanent link">&para;</a></h3>
+<p>不允许在 <code>WHERE</code> 语句后面引用别名，可以用 <code>HAVING</code> 代替 <code>WHERE</code> 。</p>
+<p>!!! example <strong>题目</strong></p>
+<pre><code>[牛客网题目](https://www.nowcoder.com/practice/d8a624021183454586da94d280cc8046)
+易错点，执行顺序是 from -&gt; where -&gt; group by -&gt; having -&gt; select -&gt; order by -&gt; limit。
 
-<!-- ---
-icon: material/printer
---- -->
+所以如果在 where 后面限制 total_price，这时候 select 里的 SUM 都没开始计算，OrderItems里没有 total_price，所以会报错 where 找不到 total_price。
+</code></pre>
+<h3 id="distinct"><code>DISTINCT</code>：提取唯一值<a class="headerlink" href="#distinct" title="Permanent link">&para;</a></h3>
+<p><div class="highlight"><pre><span></span><code><span class="c1">-- 选择所有不同的特定列（这里是 country 列）的唯一值</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">country</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="p">;</span>
+</code></pre></div>
+在上述代码中，我们使用了 SELECT DISTINCT 命令来从 customers 表中提取唯一的 country 列数据。DISTINCT 关键字告诉数据库只返回不同的值，而不是重复的值。</p>
+<p>如果 customers 表中有多个相同的国家，那么该查询将仅返回一个该国家的唯一值，而不是每个重复的实例。</p>
+<p>这是适用于许多情况的有用的功能，例如从表中查找唯一值以进行分析或过滤掉重复值，以使结果更具可读性。</p>
+<h3 id="in"><code>IN</code>：等于多个值中的一个<a class="headerlink" href="#in" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">state</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;VA&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;NY&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;CA&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">#</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">!</span>
+</code></pre></div>
+<ol>
+<li>IN 后面用圆括号，而不是方括号。</li>
+</ol>
+<p>等价于
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;VA&#39;</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;NY&#39;</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;CA&#39;</span>
+</code></pre></div></p>
+<h3 id="between"><code>BETWEEN</code>：介于两者之间<a class="headerlink" href="#between" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">points</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">200</span>
+</code></pre></div>
+<p>等价于（两端是大于等于和小于等于，而不是大于和小于）</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">points</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">points</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">200</span>
+</code></pre></div>
+<h3 id="like"><code>LIKE</code>：筛选字符串<a class="headerlink" href="#like" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">first_name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;b%&#39;</span>
+</code></pre></div>
+<ul>
+<li><code>%</code>代表任意长度的字符，可以是 0 个。</li>
+<li>这句话意思是筛选出<code>first_name</code>是以<code>b</code>或<code>B</code>开头的数据。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">first_name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%b%&#39;</span>
+</code></pre></div>
+<ul>
+<li><code>_</code>代表一个长度的字符，不能多也不能少，必须刚好一个长度。</li>
+<li>这句话意思是筛选出<code>first_name</code>是以<code>b</code>或<code>B</code>结尾的，且前面有一个字符的数据。</li>
+</ul>
+<h3 id="regexp"><code>REGEXP</code>: 正则表达式筛选字符串<a class="headerlink" href="#regexp" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">first_name</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">&#39;^a&#39;</span><span class="w"> </span><span class="o">#</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">!</span>
+</code></pre></div>
+<ol>
+<li><code>REGEXP</code> 后面用单引号将正则表达式放入其中。</li>
+<li>^: beginning of a string</li>
+<li>$: end of a string</li>
+<li>|: logical OR</li>
+<li>[abc]: match any single characters</li>
+<li>[a-d]: any characters from a to d，这样就不用把 [abcd] 全部写出来了。</li>
+</ol>
+<h3 id="substring"><code>SUBSTRING</code>：从一个字符串中提取一个子字符串<a class="headerlink" href="#substring" title="Permanent link">&para;</a></h3>
+<p><code>SUBSTRING</code> 需要至少两个参数：要提取的字符串和要提取的子字符串的起始位置。</p>
+<p><code>SUBSTRING</code> 的语法如下：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SUBSTRING</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">start_position</span><span class="p">,</span><span class="w"> </span><span class="k">length</span><span class="p">)</span>
+</code></pre></div>
+<p>其中，
+- <code>string</code> 是要提取子字符串的原始字符串。
+- <code>start_position</code> 是子字符串的起始位置，可以是一个整数值或一个表达式。
+- <code>length</code> 是要提取的子字符串长度，可以是一个整数值或一个表达式。如果省略此参数，则将提取从起始位置到字符串末尾的所有字符。</p>
+<p>例如，以下代码将从字符串 <code>"Hello, world!"</code> 中提取子字符串 <code>"world"</code>：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">SUBSTRING</span><span class="p">(</span><span class="s1">&#39;Hello, world!&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+</code></pre></div>
+<p>输出：</p>
+<p>world SUBSTRING() 还支持在 WHERE 子句中使用，以过滤基于子字符串的查询结果。</p>
+<h3 id="concat"><code>CONCAT()</code>：连接两个或多个字符串<a class="headerlink" href="#concat" title="Permanent link">&para;</a></h3>
+<p>在 SQL 中，<code>CONCAT()</code> 函数用于将两个或多个字符串连接在一起。它接受任意数量的字符串参数，并将它们连接成一个字符串。</p>
+<p>语法：
+<div class="highlight"><pre><span></span><code><span class="n">CONCAT</span><span class="p">(</span><span class="n">string1</span><span class="p">,</span><span class="w"> </span><span class="n">string2</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span>
+</code></pre></div></p>
+<p>参数：
+- string1, string2, ...：要连接的字符串。</p>
+<p>返回值：</p>
+<ul>
+<li>连接后的字符串。</li>
+</ul>
+<p>示例：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">CONCAT</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;World&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">Greeting</span><span class="p">;</span>
+</code></pre></div>
+<p>输出：</p>
+<div class="highlight"><pre><span></span><code>Hello World
+</code></pre></div>
+<p>注意：</p>
+<ul>
+<li>如果任何一个参数为 NULL，则整个结果为 NULL。</li>
+<li>如果参数都是数字，则它们将被转换为字符串并连接在一起。</li>
+</ul>
+<h3 id="is-null"><code>IS NULL</code>：筛选空值<a class="headerlink" href="#is-null" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">phone</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span>
+</code></pre></div>
+<h3 id="order-by"><code>ORDER BY</code>：排序<a class="headerlink" href="#order-by" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">state</span><span class="p">,</span><span class="w"> </span><span class="n">first_name</span><span class="w"> </span><span class="k">DESC</span>
+</code></pre></div>
+<ul>
+<li><code>ORDER BY</code>两个字段，实现双重排序。</li>
+<li><code>DESC</code>是按降序排列。</li>
+</ul>
+<p>还可以按多列排序，如下所示：</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="k">ASC</span><span class="p">,</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
+</code></pre></div>
+<p>其中，column1 表示第一列，ASC 表示升序排列，column2 表示第二列，DESC 表示降序排列。</p>
+<p>!!! Tip <strong>注意</strong></p>
+<pre><code>`ORDER BY` 语句必须放在 `WHERE` 之后。
+</code></pre>
+<h3 id="limit"><code>LIMIT</code>：取前几条数据<a class="headerlink" href="#limit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">LIMIT</span><span class="w"> </span><span class="mi">3</span>
+</code></pre></div>
+<ul>
+<li>限制返回的结果条数。最终只返回 3 条数据。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">LIMIT</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span>
+</code></pre></div>
+<ul>
+<li>先跳过前 6 条数据，再返回第 7 至 9 条数据。</li>
+</ul>
+<h2 id="_2"><strong>连接</strong><a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="inner-join"><code>INNER JOIN</code>：内连接<a class="headerlink" href="#inner-join" title="Permanent link">&para;</a></h3>
+<p><div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">first_name</span><span class="p">,</span><span class="w"> </span><span class="n">last_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">c</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="n">o</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">customer_id</span>
+</code></pre></div>
+- <code>FROM customers c</code>是给<code>customers</code>起一个别名<code>c</code>，之后就可以用<code>c</code>来代替<code>customers</code>，起到简化代码的作用。
+- 因为内连接的逻辑是按照<code>c.customer_id = o.customer_id</code>进行连接，所以得到的表有两列都是<code>customer_id</code>。这个时候，如果我们想<code>SELECT customer_id</code>，就必须指定<code>customer_id</code>是来自哪个表（其实来自哪个表都一样，因为本来就是内连接的，所以结果中的<code>customer_id</code>必然一样）。例如上面的代码就指定来自<code>c.customer_id</code>。如果不指定，则会报错说 ambiguous。</p>
+<h3 id="_3">从不同的数据库中跨表连接<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">c</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">sql_inventory</span><span class="p">.</span><span class="n">product</span><span class="w"> </span><span class="n">p</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">customer_id</span>
+</code></pre></div>
+<ul>
+<li>由于<code>product</code>在<code>sql_inventory</code>数据库，所以<code>customers</code>和<code>product</code>不在同一个数据库，在对它们进行连接时需要指定<code>product</code>在<code>sql_inventory</code>数据库。</li>
+<li>只需要指定那些不在当前数据库中的数据表。如果数据表本来就在当前数据库，则不需要指定了。</li>
+</ul>
+<h3 id="_4">将同一张表当作两张表进行连接（自身连接）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>一张表中有<code>员工 ID</code>和<code>员工对应的经理</code>，我们想找到员工和经理的对应关系。</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">employee_id</span><span class="p">,</span>
+<span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">first_name</span><span class="p">,</span>
+<span class="w">    </span><span class="n">m</span><span class="p">.</span><span class="n">first_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">emploees</span><span class="w"> </span><span class="n">e</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">emploees</span><span class="w"> </span><span class="n">m</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">reports_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">employee_id</span>
+</code></pre></div>
+<ul>
+<li>可以将同一张表设置多个别名，当成多个表来使用。</li>
+</ul>
+<h3 id="outer-join"><code>OUTER JOIN</code>：外连接<a class="headerlink" href="#outer-join" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>JOIN</code>默认是<code>INNER JOIN</code>。</li>
+<li>有两种类型的<code>OUTER JOIN</code>：<code>LEFT JOIN</code>和<code>RIGHT JOIN</code>。</li>
+<li><code>LEFT JOIN</code>会保留左边的表的所有数据，不论后面的连接配对是否成功。</li>
+<li><code>RIGHT JOIN</code>会保留右边的表的所有数据，不论后面的连接配对是否成功。</li>
+<li><code>LEFT JOIN</code>等价于<code>LEFT OUTER JOIN</code>，中间的<code>OUTER</code>可以省略不写。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">c</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="n">o</span>
+<span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">customer_id</span>
+</code></pre></div>
+<ul>
+<li>因为阅读代码的顺序是从上到下，因此建议用<code>LEFT JOIN</code>，这样可以更容易理解连接的逻辑。</li>
+<li>如果用<code>RIGHT JOIN</code>，则需要先想一下<code>RIGHT JOIN</code>后面的表长什么样子，再想前面的表，这样比较麻烦。</li>
+</ul>
+<h3 id="using"><code>USING</code>：列名相同时只需指定一个列名<a class="headerlink" href="#using" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">c</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="n">o</span>
+<span class="k">USING</span><span class="w"> </span><span class="p">(</span><span class="n">customer_id</span><span class="p">)</span>
+</code></pre></div>
+<p>等价于</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">c</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="n">o</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">customer_id</span>
+</code></pre></div>
+<h3 id="cross-join"><code>CROSS JOIN</code>：交叉连接，也叫笛卡尔乘积<a class="headerlink" href="#cross-join" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">colors</span>
+<span class="k">CROSS</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">sizes</span>
+</code></pre></div>
+<ul>
+<li>若colors有 3 行，sizes有 4 行，则CROSS JOIN后有 12 行。</li>
+</ul>
+<p><img alt="cross join" src="../../img/SQL_1.png" /></p>
+<h3 id="union"><code>UNION</code>：上下连接<a class="headerlink" href="#union" title="Permanent link">&para;</a></h3>
+<p><div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">address</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">UNION</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">address</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">clients</span>
+</code></pre></div>
+- <code>UNION</code>内部的每个<code>SELECT</code>语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每个<code>SELECT</code>语句中的列的顺序必须相同。</p>
+<h2 id="_5">函数<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h3 id="_6">聚合函数<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<ul>
+<li>avg(expr) − average value for rows within the group</li>
+<li>count(expr) − count of values for rows within the group</li>
+<li>max(expr) − maximum value within the group</li>
+<li>min(expr) − minimum value within the group</li>
+<li>sum(expr) − sum of values within the group</li>
+</ul>
+<h2 id="_7">插入数据<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h3 id="_8">数据属性<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<ul>
+<li>点击图中的工具图标，查看每列数据的属性。</li>
+</ul>
+<p><img alt="" src="../../img/SQL_2.png" /></p>
+<ul>
+<li><code>PK</code>，Primary Key：主键，唯一确定一个数据。主键可以由多个变量组成。</li>
+<li><code>NN</code>，Not Null：是否必须非空。如果打勾，则说明这个变量不能是空值。</li>
+<li><code>AI</code>，Auto Incremental：自动递增。当有新的数据插入时，自动把这个变量加 1。这在主键上经常用，通常 ID 就是逐渐加 1 的。</li>
+<li><code>Default</code>：若不指定，则默认值是多少。</li>
+<li><code>Datatype</code>中的<code>VARCHAR(50)</code>是 Variable Characters，意思是最多 50 个字符的字符串。如果用<code>CHAR(50)</code>则说明必须是 50 个字符的字符串，如果不足 50 个，系统会自动在后面补上空格，这有时是很耗费空间的。</li>
+<li><code>Datatype</code>中的<code>DECIMAL</code>不存在精度损失，数据类型<code>DECIMAL(p,s)</code>需要分别指定小数的最大位数（p）和小数位的数量（s）：</li>
+<li>例如<code>DECIMAL(4,2)</code>代表小数点左右两边所有的数字一共最多 4 个，小数点右边保留 2 个数字。</li>
+<li>p (precision) ：指定小数的最大位数，小数点的左侧和右侧的数字的总数量不能超过 p，p 的取值范围是从 1 到 38，默认值为 18。</li>
+<li>s (scale)：指定在小数点右侧的小数位数，p-s 是小数点左边的最大位数。s 必须是从 0 到 p 的值，只有在指定了精度的情况下才能指定 s，s 的默认值是 0，因此，0 &lt;= s &lt;= p。</li>
+</ul>
+<h3 id="insert"><code>INSERT</code>：插入数据<a class="headerlink" href="#insert" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customers</span><span class="p">(</span><span class="n">first_name</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">points</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Mosh&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="k">DEFAULT</span><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li><code>NULL</code>代表空值。</li>
+<li><code>DEFAULT</code>代表默认值，默认值具体是多少，可以在上图中查看。</li>
+</ul>
+<h3 id="_9">一次插入多行<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customers</span><span class="p">(</span><span class="n">first_name</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">points</span><span class="p">)</span>
+<span class="k">VALUES</span>
+<span class="p">(</span><span class="s1">&#39;Mosh&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="k">DEFAULT</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">&#39;Bob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;1234&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="_10">将整个表插入到另外的表<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">orders_archived</span><span class="w"> </span><span class="k">AS</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="k">order</span>
+</code></pre></div>
+<ul>
+<li>将<code>order</code>表格整个地复制到新表中，成为<code>orders_archived</code>。</li>
+<li>新表不会记录原表格的主键等信息。</li>
+</ul>
+<h2 id="_11">更新数据<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="k">table_name</span>
+<span class="k">SET</span><span class="w"> </span><span class="n">column_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">column_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li>用<code>WHERE</code>筛选出想要筛选的数据后，用<code>SET</code>更新想要更新的列数据。</li>
+</ul>
+<h2 id="_12">删除数据<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">ID</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li>用<code>WHERE</code>筛选出想要筛选的数据后，用<code>DELETE FROM</code>删除想要删除的一整行数据。</li>
+</ul>
 
 
 
