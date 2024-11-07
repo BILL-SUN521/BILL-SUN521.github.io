@@ -2513,7 +2513,7 @@ nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
 massa, nec semper lorem quam in massa.</p>
 </div>
 <div class="admonition abstract">
-<p class="admonition-title">Abstract</p>
+<p class="admonition-title">Cheat Sheet</p>
 <p><a href="https://codewithmosh.com/">Mosh Cheat Sheet</a>
 <a href="https://learnsql.com/blog/ultimate-sql-cheat-sheet/All-sql-cheat-sheet-a4.pdf">LearnSQL.com Cheat Sheet</a></p>
 </div>
@@ -2537,12 +2537,12 @@ massa, nec semper lorem quam in massa.</p>
 </ul>
 <h3 id="where"><code>WHERE</code> 筛选<a class="headerlink" href="#where" title="Permanent link">&para;</a></h3>
 <p>不允许在 <code>WHERE</code> 语句后面引用别名，可以用 <code>HAVING</code> 代替 <code>WHERE</code> 。</p>
-<p>!!! example <strong>题目</strong></p>
-<pre><code>[牛客网题目](https://www.nowcoder.com/practice/d8a624021183454586da94d280cc8046)
-易错点，执行顺序是 from -&gt; where -&gt; group by -&gt; having -&gt; select -&gt; order by -&gt; limit。
-
-所以如果在 where 后面限制 total_price，这时候 select 里的 SUM 都没开始计算，OrderItems里没有 total_price，所以会报错 where 找不到 total_price。
-</code></pre>
+<div class="admonition example">
+<p class="admonition-title">题目</p>
+<p><a href="https://www.nowcoder.com/practice/d8a624021183454586da94d280cc8046">牛客网题目</a>
+易错点，执行顺序是 from -&gt; where -&gt; group by -&gt; having -&gt; select -&gt; order by -&gt; limit。</p>
+<p>所以如果在 where 后面限制 total_price，这时候 select 里的 SUM 都没开始计算，OrderItems里没有 total_price，所以会报错 where 找不到 total_price。</p>
+</div>
 <h3 id="distinct"><code>DISTINCT</code>：提取唯一值<a class="headerlink" href="#distinct" title="Permanent link">&para;</a></h3>
 <p><div class="highlight"><pre><span></span><code><span class="c1">-- 选择所有不同的特定列（这里是 country 列）的唯一值</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">country</span>
@@ -2617,7 +2617,8 @@ massa, nec semper lorem quam in massa.</p>
 <div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">SUBSTRING</span><span class="p">(</span><span class="s1">&#39;Hello, world!&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
 </code></pre></div>
 <p>输出：</p>
-<p>world SUBSTRING() 还支持在 WHERE 子句中使用，以过滤基于子字符串的查询结果。</p>
+<p>world </p>
+<p>SUBSTRING() 还支持在 WHERE 子句中使用，以过滤基于子字符串的查询结果。</p>
 <h3 id="concat"><code>CONCAT()</code>：连接两个或多个字符串<a class="headerlink" href="#concat" title="Permanent link">&para;</a></h3>
 <p>在 SQL 中，<code>CONCAT()</code> 函数用于将两个或多个字符串连接在一起。它接受任意数量的字符串参数，并将它们连接成一个字符串。</p>
 <p>语法：
@@ -2660,9 +2661,10 @@ massa, nec semper lorem quam in massa.</p>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">column1</span><span class="w"> </span><span class="k">ASC</span><span class="p">,</span><span class="w"> </span><span class="n">column2</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
 </code></pre></div>
 <p>其中，column1 表示第一列，ASC 表示升序排列，column2 表示第二列，DESC 表示降序排列。</p>
-<p>!!! Tip <strong>注意</strong></p>
-<pre><code>`ORDER BY` 语句必须放在 `WHERE` 之后。
-</code></pre>
+<div class="admonition tip">
+<p class="admonition-title">注意</p>
+<p><code>ORDER BY</code> 语句必须放在 <code>WHERE</code> 之后。</p>
+</div>
 <h3 id="limit"><code>LIMIT</code>：取前几条数据<a class="headerlink" href="#limit" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
