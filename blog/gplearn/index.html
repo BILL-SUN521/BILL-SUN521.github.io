@@ -2210,279 +2210,316 @@ gp_features = gp.transform(df)
 new_diabetes = np.hstack((df, gp_features))
 <div class="highlight"><pre><span></span><code>## 针对时间序列的自定义函数，针对于二维 时间 × 特征 的 情况， 三维数据 时间 × 特征 × 股票 的讨论在下一部分
 
-下面常用算子作用分别是：
-- _delta_x: 计算一阶差分
-- _delay_x: x阶延迟lag
-
-下面常用算子作用分别是：
-
-- _delta: 计算一阶差分
-- _delay: 用data[i-2]的数据代替data[i]
-- _ts_sum_numba：计算滚动和
-- _ts_mean_numba：计算滚动均值
-- _ts_std_numba：计算滚动标准差
-- _ts_rank_numba：计算滚动排名
-- _ts_prod_numba：计算滚动乘积
-- _ts_min_numba：计算滚动最小值
-- _ts_max_numba：计算滚动最大值
-- _ts_scale_numba：计算滚动z-score
-- _ts_argmax_numba：计算滚动最大值位置
-- _ts_argmin_numba：计算滚动最小值位置
-- _ts_beta: 计算滚动回归
-- _ts_intercept: 计算滚动截距
-- _ts_residuals: 计算滚动残差
-- _ts_pearson: 计算滚动皮尔逊相关系数
-- _ts_spearman: 计算滚动斯皮尔曼相关系数
-- _ts_covariance: 计算滚动协方差
-
-```py title=&quot;numba加速的高速算子&quot;
-@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
-def rolling_sum_numba(data, n):
-    res = np.empty(len(data), dtype=np.float64)
-    # 缓存的窗口内数据求和结果
-    nobuffer_flag = True
-    sum_buffer = 0
-    res[0] = data[0]
-    for i, x in enumerate(data[1:n], 1):
-        res[i] = res[i-1] + x
-    for i, x in enumerate(data[n:], n):
-        head_x = data[i-n]
-        # 如果缓存结果为空，则先通过遍历求第一次结果
-        if nobuffer_flag:
-            nobuffer_flag = False
-            sum_tick = 0
-            for tick in data[1:n+1]:
-                sum_tick += tick
-            res[i] = sum_tick
-            # 将求和结果缓存下来
-            sum_buffer = sum_tick
-        else:
-            # 这里的算法将计算复杂度从O(n)降低到了O(1)
-            sum_buffer = sum_buffer - head_x + x
-            res[i] = sum_buffer
-    return res
-
-# 左开右闭
-def _ts_sum_numba(data):
-    window = 10
-    value = rolling_sum_numba(data.astype(np.float64), window)
-    value = np.nan_to_num(value)
-    return value
-
-@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
-def rolling_mean_numba(data, n):
-    res = np.empty(len(data), dtype=np.float64)
-    nobuffer_flag = True
-    sum_buffer = 0
-    res[0] = data[0]
-    for i, x in enumerate(data[1:n], 1):
-        res[i] = (res[i-1]*i+x)/(i+1)
-    for i, x in enumerate(data[n:], n):
-        head_x = data[i-n]
-        if nobuffer_flag:
-            nobuffer_flag = False
-            sum_tick = 0
-            for tick in data[1:n+1]:
-                sum_tick += tick
-            res[i] = sum_tick/n
-            sum_buffer = sum_tick
-        else:
-            sum_buffer = sum_buffer - head_x + x
-            res[i] = sum_buffer/n
-    return res
-
-# 左开右闭
-def _ts_mean_numba(data):
-    window = 10
-    value = rolling_mean_numba(data.astype(np.float64), window)
-    value = np.nan_to_num(value)
-    return value
-
-@jit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
-def rolling_std_numba(data, n):
-    res = np.empty(len(data), dtype=np.float64)
-    # 保护标准差（如果为0，标准差变为0.001）
-    res[0] = 0.001
-    for i, x in enumerate(data[1:n], 1):
-        res[i] = np.std(data[:i+1])
-    for i, x in enumerate(data[n:], n):
-        res[i] = np.std(data[i-n+1:i+1])
-    return res
-
-# 左开右闭
-def _ts_std_numba(data):
-    window = 10
-    value = rolling_std_numba(data.astype(np.float64), window)
-    value = np.where(np.abs(value) &gt; 0.001, value, 0.001)
-    value = np.nan_to_num(value)
-    return value
-
-@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
-def rolling_rank_numba(data, n):
-    res = np.empty(len(data), dtype=np.float64)
-    res[0] = 1
-    for i, x in enumerate(data[1:n], 1):
-        idx = np.argsort(data[:i+1])
-        res[i] = np.argsort(idx)[-1] + 1
-    for i, x in enumerate(data[n:], n):
-        idx = np.argsort(data[i-n+1:i+1])
-        res[i] = np.argsort(idx)[-1] + 1
-    return res
-
-def _ts_rank_numba(data):
-    window = 10
-    value = rolling_rank_numba(data.astype(np.float64), window)
-    value = np.nan_to_num(value)
-    return value
-
-@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
-def rolling_prod_numba(data, n):
-    res = np.empty(len(data), dtype=np.float64)
-    nobuffer_flag = True
-    prod_buffer = 1
-    res[0] = data[0]
-    for i, x in enumerate(data[1:n], 1):
-        res[i] = res[i-1] * x
-    for i, x in enumerate(data[n:], n):
-        head_x = data[i-n]
-        # 如果缓存结果为空，则先通过遍历求第一次结果
-        if nobuffer_flag:
-            nobuffer_flag = False
-            prod_tick = 1
-            for tick in data[1:n+1]:
-                prod_tick *= tick
-            res[i] = prod_tick
-            # 将乘积结果缓存下来
-            prod_buffer = prod_tick
-        else:
-            if head_x == 0:  # pop出的元素为0
-                prod_buffer = 1
-                for j, y in enumerate(data[i-n+1:i+1], i-n+1):
-                    prod_buffer *= y
-            else:  # pop出的元素不为0
-                prod_buffer /= head_x
-                prod_buffer *= x
-            res[i] = prod_buffer
-    return res
-
-# 左开右闭
-def _ts_prod_numba(data):
-    window = 10
-    value = rolling_prod_numba(data.astype(np.float64), window)
-    value = np.nan_to_num(value)
-    return value
-
-@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
-def rolling_min_numba(data, n):
-    res = np.empty(len(data), dtype=np.float64)
-    res[0] = data[0]
-    for i, x in enumerate(data[1:n], 1):
-        res[i] = x if x &lt; res[i-1] else res[i-1]
-    for i, x in enumerate(data[n:], n):
-        res[i] = min(data[i-n+1:i+1])
-    return res
-
-# 左开右闭
-# 可以像_ts_rank那样用单调队列或者最小堆，但似乎没有这个快
-def _ts_min_numba(data):
-    window = 10
-    value = rolling_min_numba(data.astype(np.float64), window)
-    value = np.nan_to_num(value)
-    return value
-
-@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
-def rolling_max_numba(data, n):
-    res = np.empty(len(data), dtype=np.float64)
-    res[0] = data[0]
-    for i, x in enumerate(data[1:n], 1):
-        res[i] = x if x &gt; res[i-1] else res[i-1]
-    for i, x in enumerate(data[n:], n):
-        res[i] = max(data[i-n+1:i+1])
-    return res
-
-# 左开右闭
-def _ts_max_numba(data):
-    window = 10
-    value = rolling_max_numba(data.astype(np.float64), window)
-    value = np.nan_to_num(value)
-    return value
-
-def _ts_scale_numba(data):
-    value_mean = _ts_mean_numba(data)
-    value_std = _ts_std_numba(data)
-    value = (data - value_mean) / value_std
-    value = np.where(value &gt; 5, 5, value)
-    value = np.where(value &lt; -5, -5, value)
-    value = np.nan_to_num(value)
-    return value
-
-# 复杂度O(data.shape[0] + window)
-@numba.njit(numba.int64[:](numba.float64[:], numba.int64), cache=True)
-def rolling_argmax_numba(data, n):
-    &quot;&quot;&quot;
-    leetcode239 单调队列 
-    复杂度 O(N + n)，N为样本数量
-
-    :param data: 
-    :param n: 回测窗口大小
-    :return: 
-    &quot;&quot;&quot;
-    res = np.empty(len(data), dtype=np.int64)
-    head = 0
-    tail = 0
-    que_idx = np.empty(len(data), dtype=np.int64)
-    for i, x in enumerate(data[:n]):
-        while tail &gt; 0 and data[que_idx[tail - 1]] &lt; x:
-            tail -= 1
-        que_idx[tail] = i
-        tail += 1
-        res[i] = que_idx[0] + 1
-    for i, x in enumerate(data[n:], n):
-        if que_idx[head] &lt;= i - n:
-            head += 1
-        while tail &gt; head and data[que_idx[tail - 1]] &lt; x:
-            tail -= 1
-        que_idx[tail] = i
-        tail += 1
-        res[i] = que_idx[head] - i + n
-    return res
-
-def _ts_argmax_numba(data):
-    window = 10
-    value = rolling_argmax_numba(data.astype(np.float64), window)
-    value = np.nan_to_num(value)
-    return value
-
-# 复杂度O(data.shape[0] + window)
-@numba.njit(numba.int64[:](numba.float64[:], numba.int64), cache=True)
-def rolling_argmin_numba(data, n):
-    res = np.empty(len(data), dtype=np.int64)
-    head = 0
-    tail = 0
-    que_idx = np.empty(len(data), dtype=np.int64)
-    for i, x in enumerate(data[:n]):
-        while tail &gt; 0 and data[que_idx[tail - 1]] &gt; x:
-            tail -= 1
-        que_idx[tail] = i
-        tail += 1
-        res[i] = que_idx[0] + 1
-    for i, x in enumerate(data[n:], n):
-        if que_idx[head] &lt;= i - n:
-            head += 1
-        while tail &gt; head and data[que_idx[tail - 1]] &gt; x:
-            tail -= 1
-        que_idx[tail] = i
-        tail += 1
-        res[i] = que_idx[head] - i + n
-    return res
-
-# 左开右闭
-def _ts_argmin_numba(data):
-    window = 10
-    value = rolling_argmin_numba(data.astype(np.float64), window)
-    value = np.nan_to_num(value)
-    return value
+```py title=&quot;先调入库&quot;
+import numpy as np
+import numba
+from numba import jit
 </code></pre></div></p>
+<p>下面常用算子作用分别是：
+- _delta_x: 计算一阶差分
+- _delay_x: x阶延迟lag</p>
+<div class="highlight"><span class="filename">delta,delay</span><pre><span></span><code><span class="c1"># 自定义函数, make_function函数群</span>
+<span class="k">def</span> <span class="nf">_delta_1</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">_delta_2</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">_delta_3</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">_delay_1</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">period</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">period</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">_delay_2</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">period</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">period</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">_delay_3</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">period</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">period</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+</code></pre></div>
+<p>下面常用算子作用分别是：</p>
+<ul>
+<li>_delta: 计算一阶差分</li>
+<li>_delay: 用data[i-2]的数据代替data[i]</li>
+<li>_ts_sum_numba：计算滚动和</li>
+<li>_ts_mean_numba：计算滚动均值</li>
+<li>_ts_std_numba：计算滚动标准差</li>
+<li>_ts_rank_numba：计算滚动排名</li>
+<li>_ts_prod_numba：计算滚动乘积</li>
+<li>_ts_min_numba：计算滚动最小值</li>
+<li>_ts_max_numba：计算滚动最大值</li>
+<li>_ts_scale_numba：计算滚动z-score</li>
+<li>_ts_argmax_numba：计算滚动最大值位置</li>
+<li>_ts_argmin_numba：计算滚动最小值位置</li>
+<li>_ts_beta: 计算滚动回归</li>
+<li>_ts_intercept: 计算滚动截距</li>
+<li>_ts_residuals: 计算滚动残差</li>
+<li>_ts_pearson: 计算滚动皮尔逊相关系数</li>
+<li>_ts_spearman: 计算滚动斯皮尔曼相关系数</li>
+<li>_ts_covariance: 计算滚动协方差</li>
+</ul>
+<div class="highlight"><span class="filename">numba加速的高速算子</span><pre><span></span><code><span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:](</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:],</span> <span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rolling_sum_numba</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="c1"># 缓存的窗口内数据求和结果</span>
+    <span class="n">nobuffer_flag</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">sum_buffer</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">:],</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">head_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">n</span><span class="p">]</span>
+        <span class="c1"># 如果缓存结果为空，则先通过遍历求第一次结果</span>
+        <span class="k">if</span> <span class="n">nobuffer_flag</span><span class="p">:</span>
+            <span class="n">nobuffer_flag</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">sum_tick</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">sum_tick</span> <span class="o">+=</span> <span class="n">tick</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_tick</span>
+            <span class="c1"># 将求和结果缓存下来</span>
+            <span class="n">sum_buffer</span> <span class="o">=</span> <span class="n">sum_tick</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 这里的算法将计算复杂度从O(n)降低到了O(1)</span>
+            <span class="n">sum_buffer</span> <span class="o">=</span> <span class="n">sum_buffer</span> <span class="o">-</span> <span class="n">head_x</span> <span class="o">+</span> <span class="n">x</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_buffer</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="c1"># 左开右闭</span>
+<span class="k">def</span> <span class="nf">_ts_sum_numba</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">rolling_sum_numba</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">window</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:](</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:],</span> <span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rolling_mean_numba</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">nobuffer_flag</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">sum_buffer</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">:],</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">head_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">n</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">nobuffer_flag</span><span class="p">:</span>
+            <span class="n">nobuffer_flag</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">sum_tick</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">sum_tick</span> <span class="o">+=</span> <span class="n">tick</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_tick</span><span class="o">/</span><span class="n">n</span>
+            <span class="n">sum_buffer</span> <span class="o">=</span> <span class="n">sum_tick</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sum_buffer</span> <span class="o">=</span> <span class="n">sum_buffer</span> <span class="o">-</span> <span class="n">head_x</span> <span class="o">+</span> <span class="n">x</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_buffer</span><span class="o">/</span><span class="n">n</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="c1"># 左开右闭</span>
+<span class="k">def</span> <span class="nf">_ts_mean_numba</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">rolling_mean_numba</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">window</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="nd">@jit</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:](</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:],</span> <span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rolling_std_numba</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="c1"># 保护标准差（如果为0，标准差变为0.001）</span>
+    <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">[:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">:],</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="c1"># 左开右闭</span>
+<span class="k">def</span> <span class="nf">_ts_std_numba</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">rolling_std_numba</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">window</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.001</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:](</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:],</span> <span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rolling_rank_numba</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">data</span><span class="p">[:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">idx</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">:],</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">idx</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="k">def</span> <span class="nf">_ts_rank_numba</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">rolling_rank_numba</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">window</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:](</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:],</span> <span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rolling_prod_numba</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">nobuffer_flag</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">prod_buffer</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">:],</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">head_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">n</span><span class="p">]</span>
+        <span class="c1"># 如果缓存结果为空，则先通过遍历求第一次结果</span>
+        <span class="k">if</span> <span class="n">nobuffer_flag</span><span class="p">:</span>
+            <span class="n">nobuffer_flag</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">prod_tick</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">prod_tick</span> <span class="o">*=</span> <span class="n">tick</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">prod_tick</span>
+            <span class="c1"># 将乘积结果缓存下来</span>
+            <span class="n">prod_buffer</span> <span class="o">=</span> <span class="n">prod_tick</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">head_x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># pop出的元素为0</span>
+                <span class="n">prod_buffer</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">i</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">prod_buffer</span> <span class="o">*=</span> <span class="n">y</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># pop出的元素不为0</span>
+                <span class="n">prod_buffer</span> <span class="o">/=</span> <span class="n">head_x</span>
+                <span class="n">prod_buffer</span> <span class="o">*=</span> <span class="n">x</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">prod_buffer</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="c1"># 左开右闭</span>
+<span class="k">def</span> <span class="nf">_ts_prod_numba</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">rolling_prod_numba</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">window</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:](</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:],</span> <span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rolling_min_numba</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">:],</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="c1"># 左开右闭</span>
+<span class="c1"># 可以像_ts_rank那样用单调队列或者最小堆，但似乎没有这个快</span>
+<span class="k">def</span> <span class="nf">_ts_min_numba</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">rolling_min_numba</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">window</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:](</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:],</span> <span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rolling_max_numba</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">:],</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="c1"># 左开右闭</span>
+<span class="k">def</span> <span class="nf">_ts_max_numba</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">rolling_max_numba</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">window</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">_ts_scale_numba</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">value_mean</span> <span class="o">=</span> <span class="n">_ts_mean_numba</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">value_std</span> <span class="o">=</span> <span class="n">_ts_std_numba</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">value_mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">value_std</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="c1"># 复杂度O(data.shape[0] + window)</span>
+<span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">[:](</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:],</span> <span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rolling_argmax_numba</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    leetcode239 单调队列 </span>
+<span class="sd">    复杂度 O(N + n)，N为样本数量</span>
+
+<span class="sd">    :param data: </span>
+<span class="sd">    :param n: 回测窗口大小</span>
+<span class="sd">    :return: </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">tail</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">que_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[:</span><span class="n">n</span><span class="p">]):</span>
+        <span class="k">while</span> <span class="n">tail</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">que_idx</span><span class="p">[</span><span class="n">tail</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">tail</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">que_idx</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">tail</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">que_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">:],</span> <span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">que_idx</span><span class="p">[</span><span class="n">head</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">n</span><span class="p">:</span>
+            <span class="n">head</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">tail</span> <span class="o">&gt;</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">que_idx</span><span class="p">[</span><span class="n">tail</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">tail</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">que_idx</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">tail</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">que_idx</span><span class="p">[</span><span class="n">head</span><span class="p">]</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="k">def</span> <span class="nf">_ts_argmax_numba</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">rolling_argmax_numba</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">window</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="c1"># 复杂度O(data.shape[0] + window)</span>
+<span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">[:](</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:],</span> <span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rolling_argmin_numba</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">tail</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">que_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[:</span><span class="n">n</span><span class="p">]):</span>
+        <span class="k">while</span> <span class="n">tail</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">que_idx</span><span class="p">[</span><span class="n">tail</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">tail</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">que_idx</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">tail</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">que_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">:],</span> <span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">que_idx</span><span class="p">[</span><span class="n">head</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">n</span><span class="p">:</span>
+            <span class="n">head</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">tail</span> <span class="o">&gt;</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">que_idx</span><span class="p">[</span><span class="n">tail</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">tail</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">que_idx</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">tail</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">que_idx</span><span class="p">[</span><span class="n">head</span><span class="p">]</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="c1"># 左开右闭</span>
+<span class="k">def</span> <span class="nf">_ts_argmin_numba</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">rolling_argmin_numba</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">window</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+</code></pre></div>
 <div class="highlight"><span class="filename">计算 X 和 Y 在滚动 N(=10) 期窗口内的回归系数、截距、残差、相关系数和协方差。</span><pre><span></span><code><span class="k">def</span> <span class="nf">rolling_regression_beta</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
     <span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2763,6 +2800,104 @@ def _ts_argmin_numba(data):
 <span class="c1">## Activate The Customized Fitness Function</span>
 <span class="n">my_metric</span> <span class="o">=</span> <span class="n">make_fitness</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_my_metric</span><span class="p">,</span> <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
+<h2 id="_4">针对三维数据 时间 × 特征 × 股票 的情况<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>这时我们所有的框架都要进行一点魔改</p>
+<p>首先是数据，原始的金融数据一般是一个表格形式，记录了不同时间不同股票的信息，如：</p>
+<table>
+<thead>
+<tr>
+<th>股票代码</th>
+<th>交易日期</th>
+<th>开盘价</th>
+<th>最高价</th>
+<th>最低价</th>
+<th>收盘价</th>
+<th>成交量</th>
+<th>成交额</th>
+<th>收益率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SH000001</td>
+<td>2024-01-01</td>
+<td>14.71</td>
+<td>15.01</td>
+<td>14.42</td>
+<td>14.46</td>
+<td>3678</td>
+<td>53197</td>
+<td>-0.0092</td>
+</tr>
+<tr>
+<td>SH000002</td>
+<td>2024-01-01</td>
+<td>14.87</td>
+<td>15.17</td>
+<td>14.57</td>
+<td>14.81</td>
+<td>2541</td>
+<td>37634</td>
+<td>0.0101</td>
+</tr>
+<tr>
+<td>SH000001</td>
+<td>2024-01-02</td>
+<td>14.44</td>
+<td>14.72</td>
+<td>14.15</td>
+<td>14.42</td>
+<td>2317</td>
+<td>33399</td>
+<td>-0.0034</td>
+</tr>
+<tr>
+<td>SH000002</td>
+<td>2024-01-02</td>
+<td>14.66</td>
+<td>14.95</td>
+<td>14.37</td>
+<td>14.53</td>
+<td>1511</td>
+<td>21959</td>
+<td>-0.0188</td>
+</tr>
+<tr>
+<td>SH000001</td>
+<td>2024-01-03</td>
+<td>14.33</td>
+<td>14.61</td>
+<td>14.04</td>
+<td>14.05</td>
+<td>2672</td>
+<td>37554</td>
+<td>-0.0250</td>
+</tr>
+<tr>
+<td>SH000002</td>
+<td>2024-01-03</td>
+<td>14.52</td>
+<td>14.81</td>
+<td>14.23</td>
+<td>14.53</td>
+<td>1879</td>
+<td>27306</td>
+<td>-0.0001</td>
+</tr>
+</tbody>
+</table>
+<p>这时 我们可以考虑使用pandas库中的pivot_table将数据转化为三维数据，即：</p>
+<p><code>index_name = '交易日期'</code>
+<code>columns_name = '股票代码'</code>
+<code>df.pivot_table(index=[index_name], columns=[columns_name], sort=True, dropna=False)</code></p>
+<p>这样我们就可以有一个 时间 × (特征 × 股票)MultiIndex,level_1为股票代码，level_0为时间， 的三维的数据表</p>
+<p>接着令
+<div class="highlight"><pre><span></span><code><span class="n">X_0_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">X_1_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">X_2_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">X_0_len</span><span class="p">,</span> <span class="n">X_1_len</span><span class="p">,</span> <span class="n">X_2_len</span><span class="p">)</span>
+</code></pre></div></p>
+<p>最终得到了一个 时间 × 特征 × 股票 的 numpy 数组。</p>
 
 
 
