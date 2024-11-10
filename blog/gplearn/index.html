@@ -1,0 +1,2835 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="个人主页">
+      
+      
+        <meta name="author" content="sun">
+      
+      
+        <link rel="canonical" href="https://bill-sun521.github.io/blog/gplearn/">
+      
+      
+        <link rel="prev" href="../SQL%20%E6%8A%80%E5%B7%A7%EF%BC%9A%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E4%B8%AD%E4%BD%8D%E6%95%B0/">
+      
+      
+        <link rel="next" href="../../code/">
+      
+      
+      <link rel="icon" href="../../img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.41">
+    
+    
+      
+        <title>用gplearn库实现遗传规划挖掘因子 - 我的个人博客(猜猜我是谁)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+      <link rel="stylesheet" href="../../mkdocs/css/no-footer.css">
+    
+      <link rel="stylesheet" href="../../mkdocs/css/unordered-list-symbols.css">
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gplearn" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="https://example.com" title="我的个人博客(猜猜我是谁)" class="md-header__button md-logo" aria-label="我的个人博客(猜猜我是谁)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            我的个人博客(猜猜我是谁)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              用gplearn库实现遗传规划挖掘因子
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="orange"  aria-label="切换至夜间模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换至夜间模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="orange"  aria-label="切换至日间模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至日间模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://bill-sun521.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bill-sun521.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  博客
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../code/" class="md-tabs__link">
+          
+  
+    
+  
+  代码
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../xiaolv/" class="md-tabs__link">
+          
+  
+    
+  
+  效率
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../about/" class="md-tabs__link">
+          
+  
+    
+  
+  关于
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://example.com" title="我的个人博客(猜猜我是谁)" class="md-nav__button md-logo" aria-label="我的个人博客(猜猜我是谁)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    我的个人博客(猜猜我是谁)
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://bill-sun521.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bill-sun521.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    主页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    博客
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            博客
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../duoyuantiaojian/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    多元正态的条件分布
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BD%BF%E7%94%A8%20joblib%20%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 joblib 实现简单的并行计算
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kaggle_GPU/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kaggle自带GPU的情况调查
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../baidu_pa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Selenium 库和百度
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XGBosst%E5%8F%82%E6%95%B0%E4%BB%8B%E7%BB%8D/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    XGboost
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    异常检测算法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    jupyter 的 魔法函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SQL%20%E6%8A%80%E5%B7%A7%EF%BC%9A%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E4%B8%AD%E4%BD%8D%E6%95%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SQL求中位数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    用gplearn库实现遗传规划挖掘因子
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    用gplearn库实现遗传规划挖掘因子
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gplearnsymbolic-transformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      gplearn库中的Symbolic Transformer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="gplearn库中的Symbolic Transformer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      参数介绍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      例子
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      或者：
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../code/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    代码
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            代码
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/pandas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pandas 数据框
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/numpy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NumPy 数组
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/list/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    List 列表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/loop/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Loop 循环
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/plot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plot 绘图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/print/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Print 打印
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/pachong/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    scraper 爬虫
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_9" id="__nav_3_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Machine Learning 机器学习
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_9">
+            <span class="md-nav__icon md-icon"></span>
+            Machine Learning 机器学习
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/sl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Supervised learning 监督学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/ul/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Unsupervised learning 无监督学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/ssl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semi-supervised learning 半监督学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/tl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transfer learning 迁移学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/el/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ensemble learning 集成学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/dr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dimensionality reduction 降维
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/fs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Feature selection 特征选择
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/fe/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Feature extraction 特征提取
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/me/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model evaluation 模型评估
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/ms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model selection 模型选择
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/mt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model tuning 模型调参
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Deep Learning 深度学习
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_10">
+            <span class="md-nav__icon md-icon"></span>
+            Deep Learning 深度学习
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/NN/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Neural network 神经网络
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/CNN/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Convolutional neural network 卷积神经网络
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/RNN/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Recurrent neural network 循环神经网络
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/GAN/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generative adversarial network 生成对抗网络
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformers 变压器网络
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/GM/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generative model 生成模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_11" id="__nav_3_11_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Reinforcement learning 强化学习
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_11">
+            <span class="md-nav__icon md-icon"></span>
+            Reinforcement learning 强化学习
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/MDP/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Markov decision process 马尔可夫决策过程
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/value/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    value-based learning 价值学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/policy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    policy-based reinforcement learning 策略学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/MA/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi-agent 多智能体强化学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/LLM/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Large language model 大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/sql/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SQL 数据库
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/r/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    R 语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_15" id="__nav_3_15_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    算法
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_15">
+            <span class="md-nav__icon md-icon"></span>
+            算法
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/DSA/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    数据结构与算法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/Hot100/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Leetcode Hot100
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_16" id="__nav_3_16_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    其他工具
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_16">
+            <span class="md-nav__icon md-icon"></span>
+            其他工具
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/git/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Git
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../xiaolv/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    效率
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            效率
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../about/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    关于
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            关于
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gplearnsymbolic-transformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      gplearn库中的Symbolic Transformer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="gplearn库中的Symbolic Transformer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      参数介绍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      例子
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      或者：
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="gplearn">Gplearn的各种使用：<a class="headerlink" href="#gplearn" title="Permanent link">&para;</a></h1>
+<h2 id="gplearnsymbolic-transformer">gplearn库中的Symbolic Transformer<a class="headerlink" href="#gplearnsymbolic-transformer" title="Permanent link">&para;</a></h2>
+<p>Symbolic Transformer是一种有监督的转换器，它首先通过构建一组随机公式来表示关系。这些公式被表示为树状结构，数学函数递归地应用于变量和常量。每一代程序都是从前一代进化而来的，通过选择种群中最适合的个体进行遗传操作，如交叉、变异或复制。最终的种群中搜索出彼此之间相关性最小的最适合个体。</p>
+<h3 id="_1">参数介绍<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>gplearn库中的Symbolic Transformer是一种基于遗传编程的特征工程工具。它通过进化算法生成新的特征，以提高机器学习模型的性能。以下是一些关键参数的介绍：</p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>定义和参数设置说明</th>
+<th>参数设置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>generations</td>
+<td>公式进化的世代数量。世代数量越多，消耗算力越多，公式的进化次数越多。</td>
+<td>3</td>
+</tr>
+<tr>
+<td>population_size</td>
+<td>每一代公式群体中的公式数量。公式数量越大，消耗算力越多，公式之间组合的空间越大。</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>function_set</td>
+<td>用于构建和进化公式时使用的函数集，可自定义更多函数。</td>
+<td>使用图表8中的函数集</td>
+</tr>
+<tr>
+<td>init_depth</td>
+<td>公式树的初始化深度，init_depth是一个二元组(min_depth, max_depth)，树的初始深度将处在[min_depth, max_depth]区间内。设置树深度最小1层，最大4层。最大深度越深，可能得出越复杂的因子，但是因子的意义更难解释。</td>
+<td>(1,4)</td>
+</tr>
+<tr>
+<td>tournament_size</td>
+<td>每一代的所有公式中，tournament_size个公式会被随机选中，其中适应度最高的公式能进行变异或繁殖生成下一代公式。tournament_size越小，随机选择范围越小，选择的结果越不确定</td>
+<td>20</td>
+</tr>
+<tr>
+<td>metric</td>
+<td>适应度指标，可自定义更多指标。</td>
+<td>自定义的RankIC指标</td>
+</tr>
+<tr>
+<td>p_crossover</td>
+<td>父代进行交叉变异进化的概率。交叉变异是最有效的进化方式，可以设置为较大概率。</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>p_subtree_mutation</td>
+<td>父代进行子树变异进化的概率。子树变异的结果不稳定，概率不宜过大。</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>p_hoist_mutation</td>
+<td>父代进行Hoist变异进化的概率。本文的测试中公式树层次都较低，所以没有使用Hoist变异。</td>
+<td>0</td>
+</tr>
+<tr>
+<td>p_point_mutation</td>
+<td>父代进行点变异进化的概率。点变异的结果不稳定，概率不宜过大。</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>p_point_replace</td>
+<td>即点变异中父代每个节点进行变异进化的概率。点变异的概率已经很小，可设置为较大概率保证点变异的执行。</td>
+<td></td>
+</tr>
+<tr>
+<td>stopping_criteria</td>
+<td>提前停止进化所需的度量值。</td>
+<td></td>
+</tr>
+<tr>
+<td>n_jobs</td>
+<td>拟合并行运行的作业数。如果为-1，则作业数设置为内核数。</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>verbose</td>
+<td>控制进化构建过程的冗长程度。</td>
+<td>1</td>
+</tr>
+<tr>
+<td>hall_of_fame</td>
+<td>在为 n_components 寻找相关性最小的个体时进行比较的最合适程序的数量。如果为“无”，则将使用整个最终生成结果。</td>
+<td>100</td>
+</tr>
+<tr>
+<td>n_components</td>
+<td>在名人堂（hall_of_fame）中搜索相关性最小的个体后，返回的最佳节目数量。如果为“无”，将使用整个名人堂。</td>
+<td></td>
+</tr>
+<tr>
+<td>parsimony_coefficient</td>
+<td>这个常数通过调整程序的适应度，使其更不利于选择，从而对大型程序进行惩罚。数值越大，对程序的惩罚就越大，这可以控制所谓的 “膨胀 ”现象。臃肿是指进化过程中程序的规模不断扩大，而适配度却没有显著提高，这不仅耗费计算时间，而且最终结果也不容易理解。这一参数可能需要在连续运行时进行调整。(如果使用 “auto”（自动），则每一代的解析系数都会使用 c = Cov(l,f)/Var( l)重新计算，其中 Cov(l,f) 是种群中程序大小 l 与程序适合度 f 之间的协方差，Var(l) 是程序大小的方差。)</td>
+<td>0.005</td>
+</tr>
+<tr>
+<td>max_samples</td>
+<td>对每个程序进行评估时，从 X 中抽取样本的比例。</td>
+<td>0.9</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">例子<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>```py gplearn.py
+function_set = ['add', 'sub', 'mul', 'div',
+                'sqrt', 'log', 'abs', 'neg', 'inv',
+                'max', 'min']</p>
+<p>gp = SymbolicTransformer(generations=20, population_size=2000,
+                         hall_of_fame=100, n_components=10,
+                         function_set=function_set,
+                         #parsimony_coefficient=0.0005,
+                         max_samples=0.9, verbose=1,
+                         random_state=0, n_jobs=-1,metric = 'spearman')</p>
+<p>result = gp.fit(df, target)</p>
+<h2 id="_3">或者：<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h1 id="result_fit_transform-gpfit_transformdiabetesdata300-diabetestarget300">result_fit_transform = gp.fit_transform(diabetes.data[:300, :], diabetes.target[:300])<a class="headerlink" href="#result_fit_transform-gpfit_transformdiabetesdata300-diabetestarget300" title="Permanent link">&para;</a></h1>
+<h1 id="nrow-n_components">拟合完数据后直接进行转换： 返回 nrow * n_components 的数据<a class="headerlink" href="#nrow-n_components" title="Permanent link">&para;</a></h1>
+<p><div class="highlight"><pre><span></span><code>结果：
+</code></pre></div>
+ |   Population Average    |             Best Individual              |</p>
+<hr />
+<p>Gen   Length          Fitness   Length          Fitness      OOB Fitness  Time Left
+   0    11.37         0.140571        7          0.60953         0.524855      1.20m
+   1     7.15          0.35238        3         0.659272         0.309861     51.57s
+   2     5.44         0.466162        4          0.66782         0.288364     57.89s
+   3     4.49         0.586366        3         0.671457         0.320572     46.97s
+   4     3.99         0.597676        7         0.688368         0.161787     41.72s
+   5     3.65         0.605824        7         0.684906         0.135113     39.34s
+   6     3.58         0.611524        4         0.680278          0.29176     37.19s
+   7     3.68         0.612427        3         0.674306         0.339035     33.66s
+   8     4.08         0.611616        7         0.677397          0.32696     30.98s
+   9     4.78         0.610042        7         0.680798         0.323262     33.81s
+  10     5.51         0.611407        9          0.68331         0.320245     25.56s
+  11     6.44         0.613251        9         0.678225         0.466664     23.09s
+  12     7.15         0.616251        9         0.700843        0.0830612     20.81s
+  13     8.12         0.617384        7          0.68119         0.344517     17.17s
+  14     8.96         0.618892       13         0.684455         0.311955     14.51s
+  15     9.51         0.620367       19         0.690903         0.205063     12.06s
+  16     9.68         0.619547       11         0.689026         0.449675      8.84s
+  17     9.89         0.621826       13         0.691072         0.386541      5.84s
+  18    10.87         0.625144       29         0.695689         0.385131      2.86s
+  19    12.40         0.627153       11         0.702239         0.409255      0.00s
+CPU times: user 20.3 s, sys: 1.33 s, total: 21.6 s
+Wall time: 59.8 s
+<div class="highlight"><pre><span></span><code>可以看到，对一个300行 * 10列的数据需要消耗 1 min
+
+```py 画图.py
+import graphviz
+dot_data = gp._best_programs[-1].export_graphviz()
+graph = graphviz.Source(dot_data)
+graph
+</code></pre></div></p>
+<p><img alt="结果" src="../../img/gplearn_graphviz.svg" /></p>
+<p>```py 其他.py
+gp.get_params() ## 获得gp的超参数设置
+gp_features = gp.transform(df)
+new_diabetes = np.hstack((df, gp_features))
+<div class="highlight"><pre><span></span><code>## 针对时间序列的自定义函数，针对于二维 时间 × 特征 的 情况， 三维数据 时间 × 特征 × 股票 的讨论在下一部分
+
+下面常用算子作用分别是：
+- _delta_x: 计算一阶差分
+- _delay_x: x阶延迟lag
+
+下面常用算子作用分别是：
+
+- _delta: 计算一阶差分
+- _delay: 用data[i-2]的数据代替data[i]
+- _ts_sum_numba：计算滚动和
+- _ts_mean_numba：计算滚动均值
+- _ts_std_numba：计算滚动标准差
+- _ts_rank_numba：计算滚动排名
+- _ts_prod_numba：计算滚动乘积
+- _ts_min_numba：计算滚动最小值
+- _ts_max_numba：计算滚动最大值
+- _ts_scale_numba：计算滚动z-score
+- _ts_argmax_numba：计算滚动最大值位置
+- _ts_argmin_numba：计算滚动最小值位置
+- _ts_beta: 计算滚动回归
+- _ts_intercept: 计算滚动截距
+- _ts_residuals: 计算滚动残差
+- _ts_pearson: 计算滚动皮尔逊相关系数
+- _ts_spearman: 计算滚动斯皮尔曼相关系数
+- _ts_covariance: 计算滚动协方差
+
+```py title=&quot;numba加速的高速算子&quot;
+@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
+def rolling_sum_numba(data, n):
+    res = np.empty(len(data), dtype=np.float64)
+    # 缓存的窗口内数据求和结果
+    nobuffer_flag = True
+    sum_buffer = 0
+    res[0] = data[0]
+    for i, x in enumerate(data[1:n], 1):
+        res[i] = res[i-1] + x
+    for i, x in enumerate(data[n:], n):
+        head_x = data[i-n]
+        # 如果缓存结果为空，则先通过遍历求第一次结果
+        if nobuffer_flag:
+            nobuffer_flag = False
+            sum_tick = 0
+            for tick in data[1:n+1]:
+                sum_tick += tick
+            res[i] = sum_tick
+            # 将求和结果缓存下来
+            sum_buffer = sum_tick
+        else:
+            # 这里的算法将计算复杂度从O(n)降低到了O(1)
+            sum_buffer = sum_buffer - head_x + x
+            res[i] = sum_buffer
+    return res
+
+# 左开右闭
+def _ts_sum_numba(data):
+    window = 10
+    value = rolling_sum_numba(data.astype(np.float64), window)
+    value = np.nan_to_num(value)
+    return value
+
+@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
+def rolling_mean_numba(data, n):
+    res = np.empty(len(data), dtype=np.float64)
+    nobuffer_flag = True
+    sum_buffer = 0
+    res[0] = data[0]
+    for i, x in enumerate(data[1:n], 1):
+        res[i] = (res[i-1]*i+x)/(i+1)
+    for i, x in enumerate(data[n:], n):
+        head_x = data[i-n]
+        if nobuffer_flag:
+            nobuffer_flag = False
+            sum_tick = 0
+            for tick in data[1:n+1]:
+                sum_tick += tick
+            res[i] = sum_tick/n
+            sum_buffer = sum_tick
+        else:
+            sum_buffer = sum_buffer - head_x + x
+            res[i] = sum_buffer/n
+    return res
+
+# 左开右闭
+def _ts_mean_numba(data):
+    window = 10
+    value = rolling_mean_numba(data.astype(np.float64), window)
+    value = np.nan_to_num(value)
+    return value
+
+@jit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
+def rolling_std_numba(data, n):
+    res = np.empty(len(data), dtype=np.float64)
+    # 保护标准差（如果为0，标准差变为0.001）
+    res[0] = 0.001
+    for i, x in enumerate(data[1:n], 1):
+        res[i] = np.std(data[:i+1])
+    for i, x in enumerate(data[n:], n):
+        res[i] = np.std(data[i-n+1:i+1])
+    return res
+
+# 左开右闭
+def _ts_std_numba(data):
+    window = 10
+    value = rolling_std_numba(data.astype(np.float64), window)
+    value = np.where(np.abs(value) &gt; 0.001, value, 0.001)
+    value = np.nan_to_num(value)
+    return value
+
+@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
+def rolling_rank_numba(data, n):
+    res = np.empty(len(data), dtype=np.float64)
+    res[0] = 1
+    for i, x in enumerate(data[1:n], 1):
+        idx = np.argsort(data[:i+1])
+        res[i] = np.argsort(idx)[-1] + 1
+    for i, x in enumerate(data[n:], n):
+        idx = np.argsort(data[i-n+1:i+1])
+        res[i] = np.argsort(idx)[-1] + 1
+    return res
+
+def _ts_rank_numba(data):
+    window = 10
+    value = rolling_rank_numba(data.astype(np.float64), window)
+    value = np.nan_to_num(value)
+    return value
+
+@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
+def rolling_prod_numba(data, n):
+    res = np.empty(len(data), dtype=np.float64)
+    nobuffer_flag = True
+    prod_buffer = 1
+    res[0] = data[0]
+    for i, x in enumerate(data[1:n], 1):
+        res[i] = res[i-1] * x
+    for i, x in enumerate(data[n:], n):
+        head_x = data[i-n]
+        # 如果缓存结果为空，则先通过遍历求第一次结果
+        if nobuffer_flag:
+            nobuffer_flag = False
+            prod_tick = 1
+            for tick in data[1:n+1]:
+                prod_tick *= tick
+            res[i] = prod_tick
+            # 将乘积结果缓存下来
+            prod_buffer = prod_tick
+        else:
+            if head_x == 0:  # pop出的元素为0
+                prod_buffer = 1
+                for j, y in enumerate(data[i-n+1:i+1], i-n+1):
+                    prod_buffer *= y
+            else:  # pop出的元素不为0
+                prod_buffer /= head_x
+                prod_buffer *= x
+            res[i] = prod_buffer
+    return res
+
+# 左开右闭
+def _ts_prod_numba(data):
+    window = 10
+    value = rolling_prod_numba(data.astype(np.float64), window)
+    value = np.nan_to_num(value)
+    return value
+
+@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
+def rolling_min_numba(data, n):
+    res = np.empty(len(data), dtype=np.float64)
+    res[0] = data[0]
+    for i, x in enumerate(data[1:n], 1):
+        res[i] = x if x &lt; res[i-1] else res[i-1]
+    for i, x in enumerate(data[n:], n):
+        res[i] = min(data[i-n+1:i+1])
+    return res
+
+# 左开右闭
+# 可以像_ts_rank那样用单调队列或者最小堆，但似乎没有这个快
+def _ts_min_numba(data):
+    window = 10
+    value = rolling_min_numba(data.astype(np.float64), window)
+    value = np.nan_to_num(value)
+    return value
+
+@numba.njit(numba.float64[:](numba.float64[:], numba.int64), cache=True)
+def rolling_max_numba(data, n):
+    res = np.empty(len(data), dtype=np.float64)
+    res[0] = data[0]
+    for i, x in enumerate(data[1:n], 1):
+        res[i] = x if x &gt; res[i-1] else res[i-1]
+    for i, x in enumerate(data[n:], n):
+        res[i] = max(data[i-n+1:i+1])
+    return res
+
+# 左开右闭
+def _ts_max_numba(data):
+    window = 10
+    value = rolling_max_numba(data.astype(np.float64), window)
+    value = np.nan_to_num(value)
+    return value
+
+def _ts_scale_numba(data):
+    value_mean = _ts_mean_numba(data)
+    value_std = _ts_std_numba(data)
+    value = (data - value_mean) / value_std
+    value = np.where(value &gt; 5, 5, value)
+    value = np.where(value &lt; -5, -5, value)
+    value = np.nan_to_num(value)
+    return value
+
+# 复杂度O(data.shape[0] + window)
+@numba.njit(numba.int64[:](numba.float64[:], numba.int64), cache=True)
+def rolling_argmax_numba(data, n):
+    &quot;&quot;&quot;
+    leetcode239 单调队列 
+    复杂度 O(N + n)，N为样本数量
+
+    :param data: 
+    :param n: 回测窗口大小
+    :return: 
+    &quot;&quot;&quot;
+    res = np.empty(len(data), dtype=np.int64)
+    head = 0
+    tail = 0
+    que_idx = np.empty(len(data), dtype=np.int64)
+    for i, x in enumerate(data[:n]):
+        while tail &gt; 0 and data[que_idx[tail - 1]] &lt; x:
+            tail -= 1
+        que_idx[tail] = i
+        tail += 1
+        res[i] = que_idx[0] + 1
+    for i, x in enumerate(data[n:], n):
+        if que_idx[head] &lt;= i - n:
+            head += 1
+        while tail &gt; head and data[que_idx[tail - 1]] &lt; x:
+            tail -= 1
+        que_idx[tail] = i
+        tail += 1
+        res[i] = que_idx[head] - i + n
+    return res
+
+def _ts_argmax_numba(data):
+    window = 10
+    value = rolling_argmax_numba(data.astype(np.float64), window)
+    value = np.nan_to_num(value)
+    return value
+
+# 复杂度O(data.shape[0] + window)
+@numba.njit(numba.int64[:](numba.float64[:], numba.int64), cache=True)
+def rolling_argmin_numba(data, n):
+    res = np.empty(len(data), dtype=np.int64)
+    head = 0
+    tail = 0
+    que_idx = np.empty(len(data), dtype=np.int64)
+    for i, x in enumerate(data[:n]):
+        while tail &gt; 0 and data[que_idx[tail - 1]] &gt; x:
+            tail -= 1
+        que_idx[tail] = i
+        tail += 1
+        res[i] = que_idx[0] + 1
+    for i, x in enumerate(data[n:], n):
+        if que_idx[head] &lt;= i - n:
+            head += 1
+        while tail &gt; head and data[que_idx[tail - 1]] &gt; x:
+            tail -= 1
+        que_idx[tail] = i
+        tail += 1
+        res[i] = que_idx[head] - i + n
+    return res
+
+# 左开右闭
+def _ts_argmin_numba(data):
+    window = 10
+    value = rolling_argmin_numba(data.astype(np.float64), window)
+    value = np.nan_to_num(value)
+    return value
+</code></pre></div></p>
+<div class="highlight"><span class="filename">计算 X 和 Y 在滚动 N(=10) 期窗口内的回归系数、截距、残差、相关系数和协方差。</span><pre><span></span><code><span class="k">def</span> <span class="nf">rolling_regression_beta</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    计算 X 和 Y 在滚动 N 期窗口内的回归系数、截距、残差、相关系数和协方差。</span>
+
+<span class="sd">    参数：</span>
+<span class="sd">        X (numpy.ndarray): 自变量序列</span>
+<span class="sd">        Y (numpy.ndarray): 因变量序列</span>
+<span class="sd">        N (int): 滚动窗口大小</span>
+
+<span class="sd">    返回：</span>
+<span class="sd">        pd.DataFrame: 包含 β值、截距、残差、Pearson相关系数、Spearman相关系数、协方差 的 DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 转换为 Pandas Series</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+
+    <span class="c1"># 创建结果存储的 DataFrame</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+        <span class="s1">&#39;Beta&#39;</span><span class="p">])</span>
+
+    <span class="c1"># 滚动窗口计算</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+        <span class="n">x_window</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">y_window</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="c1"># 线性回归</span>
+        <span class="n">linreg</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+        <span class="n">linreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_window</span><span class="p">,</span> <span class="n">y_window</span><span class="p">)</span>
+
+        <span class="c1"># 存储结果</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Beta&#39;</span><span class="p">:</span> <span class="n">linreg</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">}</span>
+
+    <span class="c1"># 填充 NaN 值为 0</span>
+    <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;future.no_silent_downcasting&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">infer_objects</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">rolling_regression_intercept</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    计算 X 和 Y 在滚动 N 期窗口内的回归系数、截距、残差、相关系数和协方差。</span>
+
+<span class="sd">    参数：</span>
+<span class="sd">        X (numpy.ndarray): 自变量序列</span>
+<span class="sd">        Y (numpy.ndarray): 因变量序列</span>
+<span class="sd">        N (int): 滚动窗口大小</span>
+
+<span class="sd">    返回：</span>
+<span class="sd">        pd.DataFrame: 包含 β值、截距、残差、Pearson相关系数、Spearman相关系数、协方差 的 DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 转换为 Pandas Series</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+
+    <span class="c1"># 创建结果存储的 DataFrame</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Intercept&#39;</span><span class="p">])</span>
+
+    <span class="c1"># 滚动窗口计算</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+        <span class="n">x_window</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">y_window</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="c1"># 线性回归</span>
+        <span class="n">linreg</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+        <span class="n">linreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_window</span><span class="p">,</span> <span class="n">y_window</span><span class="p">)</span>
+
+        <span class="c1"># 存储结果</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Intercept&#39;</span><span class="p">:</span> <span class="n">linreg</span><span class="o">.</span><span class="n">intercept_</span>
+        <span class="p">}</span>
+
+    <span class="c1"># 填充 NaN 值为 0</span>
+    <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;future.no_silent_downcasting&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">infer_objects</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">rolling_regression_residuals</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    计算 X 和 Y 在滚动 N 期窗口内的回归系数、截距、残差、相关系数和协方差。</span>
+
+<span class="sd">    参数：</span>
+<span class="sd">        X (numpy.ndarray): 自变量序列</span>
+<span class="sd">        Y (numpy.ndarray): 因变量序列</span>
+<span class="sd">        N (int): 滚动窗口大小</span>
+
+<span class="sd">    返回：</span>
+<span class="sd">        pd.DataFrame: 包含 β值、截距、残差、Pearson相关系数、Spearman相关系数、协方差 的 DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 转换为 Pandas Series</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+
+    <span class="c1"># 创建结果存储的 DataFrame</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Residuals&#39;</span><span class="p">])</span>
+
+    <span class="c1"># 滚动窗口计算</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+        <span class="n">x_window</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">y_window</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="c1"># 线性回归</span>
+        <span class="n">linreg</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+        <span class="n">linreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_window</span><span class="p">,</span> <span class="n">y_window</span><span class="p">)</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">linreg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_window</span><span class="p">)</span>
+
+        <span class="c1"># 计算残差</span>
+        <span class="n">residuals</span> <span class="o">=</span> <span class="n">y_window</span> <span class="o">-</span> <span class="n">y_pred</span>
+
+        <span class="c1"># 存储结果</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Residuals&#39;</span><span class="p">:</span> <span class="n">residuals</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># 最新一期的残差</span>
+        <span class="p">}</span>
+
+    <span class="c1"># 填充 NaN 值为 0</span>
+    <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;future.no_silent_downcasting&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">infer_objects</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">rolling_regression_pearson</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    计算 X 和 Y 在滚动 N 期窗口内的回归系数、截距、残差、相关系数和协方差。</span>
+
+<span class="sd">    参数：</span>
+<span class="sd">        X (numpy.ndarray): 自变量序列</span>
+<span class="sd">        Y (numpy.ndarray): 因变量序列</span>
+<span class="sd">        N (int): 滚动窗口大小</span>
+
+<span class="sd">    返回：</span>
+<span class="sd">        pd.DataFrame: 包含 β值、截距、残差、Pearson相关系数、Spearman相关系数、协方差 的 DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 转换为 Pandas Series</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+
+    <span class="c1"># 创建结果存储的 DataFrame</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+        <span class="s1">&#39;Pearson Corr&#39;</span>
+    <span class="p">])</span>
+
+    <span class="c1"># 滚动窗口计算</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+        <span class="n">x_window</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">y_window</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="c1"># 计算 Pearson 和 Spearman 相关系数</span>
+        <span class="c1">#pearson_corr, _ = pearsonr(x_window.flatten(), y_window)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x_window</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_window</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">pearson_corr</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 或者返回 np.nan</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pearson_corr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pearsonr</span><span class="p">(</span><span class="n">x_window</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_window</span><span class="p">)</span>
+        <span class="c1"># 存储结果</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Pearson Corr&#39;</span><span class="p">:</span> <span class="n">pearson_corr</span>
+        <span class="p">}</span>
+
+    <span class="c1"># 填充 NaN 值为 0</span>
+    <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;future.no_silent_downcasting&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">infer_objects</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">rolling_regression_spearman</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    计算 X 和 Y 在滚动 N 期窗口内的回归系数、截距、残差、相关系数和协方差。</span>
+
+<span class="sd">    参数：</span>
+<span class="sd">        X (numpy.ndarray): 自变量序列</span>
+<span class="sd">        Y (numpy.ndarray): 因变量序列</span>
+<span class="sd">        N (int): 滚动窗口大小</span>
+
+<span class="sd">    返回：</span>
+<span class="sd">        pd.DataFrame: 包含 β值、截距、残差、Pearson相关系数、Spearman相关系数、协方差 的 DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 转换为 Pandas Series</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+
+    <span class="c1"># 创建结果存储的 DataFrame</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Spearman Corr&#39;</span><span class="p">])</span>
+
+    <span class="c1"># 滚动窗口计算</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+        <span class="n">x_window</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">y_window</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="c1"># 计算 Pearson 和 Spearman 相关系数</span>
+        <span class="c1">#spearman_corr, _ = spearmanr(x_window.flatten(), y_window)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x_window</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_window</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">spearman_corr</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 或者返回 np.nan</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">spearman_corr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">x_window</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_window</span><span class="p">)</span>
+        <span class="c1"># 存储结果</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Spearman Corr&#39;</span><span class="p">:</span> <span class="n">spearman_corr</span>
+        <span class="p">}</span>
+
+    <span class="c1"># 填充 NaN 值为 0</span>
+    <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;future.no_silent_downcasting&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">infer_objects</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">rolling_regression_covariance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    计算 X 和 Y 在滚动 N 期窗口内的回归系数、截距、残差、相关系数和协方差。</span>
+
+<span class="sd">    参数：</span>
+<span class="sd">        X (numpy.ndarray): 自变量序列</span>
+<span class="sd">        Y (numpy.ndarray): 因变量序列</span>
+<span class="sd">        N (int): 滚动窗口大小</span>
+
+<span class="sd">    返回：</span>
+<span class="sd">        pd.DataFrame: 包含 β值、截距、残差、Pearson相关系数、Spearman相关系数、协方差 的 DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 转换为 Pandas Series</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+
+    <span class="c1"># 创建结果存储的 DataFrame</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Covariance&#39;</span><span class="p">])</span>
+
+    <span class="c1"># 滚动窗口计算</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+        <span class="n">x_window</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">y_window</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="c1"># 计算协方差</span>
+        <span class="c1">#covariance = np.cov(x_window.flatten(), y_window)[0, 1]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x_window</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_window</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">covariance</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 如果只有一个是常数</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">covariance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">x_window</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_window</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># 存储结果</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Covariance&#39;</span><span class="p">:</span> <span class="n">covariance</span>
+        <span class="p">}</span>
+
+    <span class="c1"># 填充 NaN 值为 0</span>
+    <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;future.no_silent_downcasting&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">infer_objects</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># results = results.fillna(0).infer_objects(copy=False)</span>
+    <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">定义一个函数，用于计算互信息</span><pre><span></span><code><span class="k">def</span> <span class="nf">_my_metric</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">result</span>  <span class="o">=</span> <span class="n">mutual_info_regression</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span><span class="n">discrete_features</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span> <span class="p">,</span><span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">make_function函数群,互信息的make_fitness</span><pre><span></span><code><span class="c1"># make_function函数群</span>
+<span class="n">delta_1</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_delta_1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">delta_2</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_delta_2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">delta_3</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_delta_3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">delay_1</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_delay_1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;delay&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">delay_2</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_delay_2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;delay&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">delay_3</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_delay_3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;delay&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_mean</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_ts_mean_numba</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_mean&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_std</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_ts_std_numba</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_std&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_prod</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_ts_prod_numba</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_prod&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_rank</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_ts_rank_numba</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_rank&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_min</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_ts_min_numba</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_min&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_max</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_ts_max_numba</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_max&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_argmax</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_ts_argmax_numba</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_argmax&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_argmin</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_ts_argmin_numba</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_argmin&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_sum</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_ts_sum_numba</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_sum&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_scale</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_ts_scale_numba</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_scale&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ts_beta</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">rolling_regression_beta</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_beta&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ts_intercept</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">rolling_regression_intercept</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_intercept&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ts_residuals</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">rolling_regression_residuals</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_residuals&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ts_pearson</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">rolling_regression_pearson</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_pearson&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ts_spearman</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">rolling_regression_spearman</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_spearman&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ts_covariance</span> <span class="o">=</span> <span class="n">make_function</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">rolling_regression_covariance</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ts_covariance&#39;</span><span class="p">,</span> <span class="n">arity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1">## Activate The Customized Fitness Function</span>
+<span class="n">my_metric</span> <span class="o">=</span> <span class="n">make_fitness</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_my_metric</span><span class="p">,</span> <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      SUN CC-BY-4.0
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.indexes", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>
