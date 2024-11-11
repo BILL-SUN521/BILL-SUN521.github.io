@@ -721,9 +721,51 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      或者：
+      针对时间序列的自定义函数，针对于二维 时间 × 特征 的 情况， 三维数据 时间 × 特征 × 股票 的讨论在下一部分
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      针对三维数据 时间 × 特征 × 股票 的情况
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="针对三维数据 时间 × 特征 × 股票 的情况">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      对数据的处理：
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      对原始以及自定义函数的处理：
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      对原始以及自定义适应性函数的处理：
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2026,9 +2068,51 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      或者：
+      针对时间序列的自定义函数，针对于二维 时间 × 特征 的 情况， 三维数据 时间 × 特征 × 股票 的讨论在下一部分
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      针对三维数据 时间 × 特征 × 股票 的情况
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="针对三维数据 时间 × 特征 × 股票 的情况">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      对数据的处理：
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      对原始以及自定义函数的处理：
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      对原始以及自定义适应性函数的处理：
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2154,25 +2238,28 @@
 </tbody>
 </table>
 <h3 id="_2">例子<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
-<p>```py gplearn.py
-function_set = ['add', 'sub', 'mul', 'div',
-                'sqrt', 'log', 'abs', 'neg', 'inv',
-                'max', 'min']</p>
-<p>gp = SymbolicTransformer(generations=20, population_size=2000,
-                         hall_of_fame=100, n_components=10,
-                         function_set=function_set,
-                         #parsimony_coefficient=0.0005,
-                         max_samples=0.9, verbose=1,
-                         random_state=0, n_jobs=-1,metric = 'spearman')</p>
-<p>result = gp.fit(df, target)</p>
-<h2 id="_3">或者：<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<h1 id="result_fit_transform-gpfit_transformdiabetesdata300-diabetestarget300">result_fit_transform = gp.fit_transform(diabetes.data[:300, :], diabetes.target[:300])<a class="headerlink" href="#result_fit_transform-gpfit_transformdiabetesdata300-diabetestarget300" title="Permanent link">&para;</a></h1>
-<h1 id="nrow-n_components">拟合完数据后直接进行转换： 返回 nrow * n_components 的数据<a class="headerlink" href="#nrow-n_components" title="Permanent link">&para;</a></h1>
-<p><div class="highlight"><pre><span></span><code>结果：
+<div class="highlight"><span class="filename">gplearn.py</span><pre><span></span><code><span class="n">function_set</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="s1">&#39;sub&#39;</span><span class="p">,</span> <span class="s1">&#39;mul&#39;</span><span class="p">,</span> <span class="s1">&#39;div&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;sqrt&#39;</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="s1">&#39;abs&#39;</span><span class="p">,</span> <span class="s1">&#39;neg&#39;</span><span class="p">,</span> <span class="s1">&#39;inv&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">]</span>
+
+
+<span class="n">gp</span> <span class="o">=</span> <span class="n">SymbolicTransformer</span><span class="p">(</span><span class="n">generations</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">population_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+                         <span class="n">hall_of_fame</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                         <span class="n">function_set</span><span class="o">=</span><span class="n">function_set</span><span class="p">,</span>
+                         <span class="c1">#parsimony_coefficient=0.0005,</span>
+                         <span class="n">max_samples</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">metric</span> <span class="o">=</span> <span class="s1">&#39;spearman&#39;</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+<span class="c1">## 或者：</span>
+<span class="c1"># result_fit_transform = gp.fit_transform(diabetes.data[:300, :], diabetes.target[:300])</span>
+<span class="c1"># 拟合完数据后直接进行转换： 返回 nrow * n_components 的数据</span>
 </code></pre></div>
- |   Population Average    |             Best Individual              |</p>
-<hr />
-<p>Gen   Length          Fitness   Length          Fitness      OOB Fitness  Time Left
+<p>结果：
+<div class="highlight"><pre><span></span><code> |   Population Average    |             Best Individual              |
+---- ------------------------- ------------------------------------------ ----------
+ Gen   Length          Fitness   Length          Fitness      OOB Fitness  Time Left
    0    11.37         0.140571        7          0.60953         0.524855      1.20m
    1     7.15          0.35238        3         0.659272         0.309861     51.57s
    2     5.44         0.466162        4          0.66782         0.288364     57.89s
@@ -2195,26 +2282,23 @@ function_set = ['add', 'sub', 'mul', 'div',
   19    12.40         0.627153       11         0.702239         0.409255      0.00s
 CPU times: user 20.3 s, sys: 1.33 s, total: 21.6 s
 Wall time: 59.8 s
-<div class="highlight"><pre><span></span><code>可以看到，对一个300行 * 10列的数据需要消耗 1 min
-
-```py 画图.py
-import graphviz
-dot_data = gp._best_programs[-1].export_graphviz()
-graph = graphviz.Source(dot_data)
-graph
 </code></pre></div></p>
+<p>可以看到，对一个300行 * 10列的数据需要消耗 1 min</p>
+<div class="highlight"><span class="filename">画图.py</span><pre><span></span><code><span class="kn">import</span> <span class="nn">graphviz</span>
+<span class="n">dot_data</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">_best_programs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">export_graphviz</span><span class="p">()</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="n">dot_data</span><span class="p">)</span>
+<span class="n">graph</span>
+</code></pre></div>
 <p><img alt="结果" src="../../img/gplearn_graphviz.svg" /></p>
-<p>```py 其他.py
-gp.get_params() ## 获得gp的超参数设置
-gp_features = gp.transform(df)
-new_diabetes = np.hstack((df, gp_features))
-<div class="highlight"><pre><span></span><code>## 针对时间序列的自定义函数，针对于二维 时间 × 特征 的 情况， 三维数据 时间 × 特征 × 股票 的讨论在下一部分
-
-```py title=&quot;先调入库&quot;
-import numpy as np
-import numba
-from numba import jit
-</code></pre></div></p>
+<div class="highlight"><span class="filename">其他.py</span><pre><span></span><code><span class="n">gp</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="c1">## 获得gp的超参数设置</span>
+<span class="n">gp_features</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">new_diabetes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">df</span><span class="p">,</span> <span class="n">gp_features</span><span class="p">))</span>
+</code></pre></div>
+<h2 id="_3">针对时间序列的自定义函数，针对于二维 时间 × 特征 的 情况， 三维数据 时间 × 特征 × 股票 的讨论在下一部分<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<div class="highlight"><span class="filename">先调入库</span><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numba</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
+</code></pre></div>
 <p>下面常用算子作用分别是：
 - _delta_x: 计算一阶差分
 - _delay_x: x阶延迟lag</p>
@@ -2801,6 +2885,7 @@ from numba import jit
 <span class="n">my_metric</span> <span class="o">=</span> <span class="n">make_fitness</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">_my_metric</span><span class="p">,</span> <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="_4">针对三维数据 时间 × 特征 × 股票 的情况<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h3 id="_5">对数据的处理：<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <p>这时我们所有的框架都要进行一点魔改</p>
 <p>首先是数据，原始的金融数据一般是一个表格形式，记录了不同时间不同股票的信息，如：</p>
 <table>
@@ -2898,6 +2983,8 @@ from numba import jit
 <span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">X_0_len</span><span class="p">,</span> <span class="n">X_1_len</span><span class="p">,</span> <span class="n">X_2_len</span><span class="p">)</span>
 </code></pre></div></p>
 <p>最终得到了一个 时间 × 特征 × 股票 的 numpy 数组。</p>
+<h3 id="_6">对原始以及自定义函数的处理：<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<h3 id="_7">对原始以及自定义适应性函数的处理：<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 
 
 
