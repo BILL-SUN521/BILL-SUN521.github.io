@@ -2972,9 +2972,9 @@ Wall time: 59.8 s
 </tbody>
 </table>
 <p>这时 我们可以考虑使用pandas库中的pivot_table将数据转化为三维数据，即：</p>
-<p><code>index_name = '交易日期'</code>
-<code>columns_name = '股票代码'</code>
-<code>df.pivot_table(index=[index_name], columns=[columns_name], sort=True, dropna=False)</code></p>
+<p><code>index_name = '交易日期'</code></p>
+<p><code>columns_name = '股票代码'</code></p>
+<p><code>df.pivot_table(index=[index_name], columns=[columns_name], sort=True, dropna=False)</code></p>
 <p>这样我们就可以有一个 时间 × (特征 × 股票)MultiIndex,level_1为股票代码，level_0为时间， 的三维的数据表</p>
 <p>接着令
 <div class="highlight"><pre><span></span><code><span class="n">X_0_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
