@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#python-npwhere-index" class="md-skip">
+        <a href="#numpy" class="md-skip">
           跳转至
         </a>
       
@@ -419,6 +419,8 @@
       
         
       
+        
+      
     
     
       
@@ -651,6 +653,27 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blog/%E8%AF%95%E9%AA%8C%E8%AE%BE%E8%AE%A1%E5%92%8C%E8%A7%82%E5%AF%9F%E6%80%A7%E7%A0%94%E7%A9%B6%E7%AC%94%E8%AE%B0-%E4%BB%A3%E7%A0%81%E9%83%A8%E5%88%86/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    试验设计和观察性研究笔记-代码部分
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -815,6 +838,15 @@
       目录
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#numpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      numpy 报错检查/抑制
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#python-npwhere-index" class="md-nav__link">
@@ -1952,6 +1984,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#numpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      numpy 报错检查/抑制
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#python-npwhere-index" class="md-nav__link">
     <span class="md-ellipsis">
       Python np.where(), .index() 运行速度比较
@@ -1980,7 +2021,39 @@
 <!-- ---
 icon: simple-numpy
 --- -->
+<h2 id="numpy">numpy 报错检查/抑制<a class="headerlink" href="#numpy" title="Permanent link">&para;</a></h2>
+<p>用于临时控制numpy的错误处理行为。主要用于抑制一些常见的数值计算警告。</p>
+<p>使用 errstate 的情况:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="c1"># 除以零会产生警告</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span>  <span class="c1"># 会显示警告信息</span>
+
+<span class="c1"># 抑制警告</span>
+<span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span>  <span class="c1"># 不会显示警告信息</span>
+</code></pre></div>
+<p>常见的错误类型：</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span>
+    <span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span>    <span class="c1"># 忽略除零警告</span>
+    <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span>   <span class="c1"># 忽略无效操作警告</span>
+    <span class="n">over</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span>      <span class="c1"># 忽略上溢出警告</span>
+    <span class="n">under</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span>      <span class="c1"># 忽略下溢出警告</span>
+<span class="p">):</span>
+    <span class="c1"># 你的计算代码</span>
+
+<span class="c1">#eg:</span>
+<span class="k">def</span> <span class="nf">safe_division</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span>
+        <span class="c1"># 处理特殊值</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
 <h2 id="python-npwhere-index">Python np.where(), .index() 运行速度比较<a class="headerlink" href="#python-npwhere-index" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">time</span>
