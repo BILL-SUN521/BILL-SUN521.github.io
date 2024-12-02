@@ -2431,43 +2431,8 @@
 <li>存在显著的交互效应，表明不同类型和部位的组合对结果有不同影响</li>
 <li>模型拟合良好，残差分布合理</li>
 </ol>
-<h1 id="23_1">2.3 黑色素瘤研究（续）<a class="headerlink" href="#23_1" title="Permanent link">&para;</a></h1>
-<h2 id="_42">数据准备<a class="headerlink" href="#_42" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="c1"># 重新读取数据</span>
-<span class="n">derm.dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.table</span><span class="p">(</span><span class="s">&quot;data/derm.dat&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
-
-<span class="c1"># 创建因子变量并应用求和约束</span>
-<span class="n">derm.dat</span><span class="o">$</span><span class="n">typef</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="n">derm.dat</span><span class="o">$</span><span class="n">type</span><span class="p">)</span>
-<span class="n">derm.dat</span><span class="o">$</span><span class="n">typefs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">C</span><span class="p">(</span><span class="n">derm.dat</span><span class="o">$</span><span class="n">typef</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">)</span>
-<span class="n">derm.dat</span><span class="o">$</span><span class="n">sitef</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="n">derm.dat</span><span class="o">$</span><span class="n">locat</span><span class="p">)</span>
-<span class="n">derm.dat</span><span class="o">$</span><span class="n">sitefs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">C</span><span class="p">(</span><span class="n">derm.dat</span><span class="o">$</span><span class="n">sitef</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">)</span>
-</code></pre></div>
-<h2 id="_43">模型分析<a class="headerlink" href="#_43" title="Permanent link">&para;</a></h2>
-<h3 id="_44">主效应模型（使用求和约束）<a class="headerlink" href="#_44" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">model1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">glm</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">typefs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sitefs</span><span class="p">,</span><span class="w"> </span><span class="n">family</span><span class="o">=</span><span class="n">poisson</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">derm.dat</span><span class="p">)</span>
-</code></pre></div>
-<p>主要发现：
-- 截距 = 3.17646 (p &lt; 0.001)
-- 组织学类型效应：
-  - typefs1: -0.87373 (p &lt; 0.001)
-  - typefs2: 0.82026 (p &lt; 0.001)
-  - typefs3: 0.42822 (p &lt; 0.001)
-- 部位效应：
-  - sitefs1: -0.54832 (p &lt; 0.001)
-  - sitefs2: -0.10439 (p = 0.189)</p>
-<h3 id="_45">残差分析<a class="headerlink" href="#_45" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># 创建偏差残差用于诊断图</span>
-<span class="n">derm.dat</span><span class="o">$</span><span class="n">fitted.values</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">model1</span><span class="o">$</span><span class="n">fitted.values</span>
-<span class="n">derm.dat</span><span class="o">$</span><span class="n">rdeviance</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">residuals.glm</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;deviance&quot;</span><span class="p">)</span>
-</code></pre></div>
-<h2 id="_46">结论<a class="headerlink" href="#_46" title="Permanent link">&para;</a></h2>
-<ol>
-<li>组织学类型和部位对黑色素瘤发生率有显著影响</li>
-<li>使用求和约束的模型提供了对效应的不同视角</li>
-<li>模型拟合良好，残差分布合理</li>
-</ol>
 <h1 id="24">2.4 安全带使用与事故死亡率分析<a class="headerlink" href="#24" title="Permanent link">&para;</a></h1>
-<h2 id="_47">数据准备<a class="headerlink" href="#_47" title="Permanent link">&para;</a></h2>
+<h2 id="_42">数据准备<a class="headerlink" href="#_42" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># 读取数据</span>
 <span class="n">acc.dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.table</span><span class="p">(</span><span class="s">&quot;D:/研究生/研一/试验设计与观察性研究/data/acc.dat&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
 
@@ -2479,17 +2444,17 @@
 <span class="n">acc.dat</span><span class="o">$</span><span class="n">injuryf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="n">acc.dat</span><span class="o">$</span><span class="n">injury</span><span class="p">)</span>
 <span class="n">acc.dat</span><span class="o">$</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">C</span><span class="p">(</span><span class="n">acc.dat</span><span class="o">$</span><span class="n">injuryf</span><span class="p">,</span><span class="w"> </span><span class="n">treatment</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="_48">模型分析<a class="headerlink" href="#_48" title="Permanent link">&para;</a></h2>
-<h3 id="_49">完全饱和模型（三阶交互）<a class="headerlink" href="#_49" title="Permanent link">&para;</a></h3>
+<h2 id="_43">模型分析<a class="headerlink" href="#_43" title="Permanent link">&para;</a></h2>
+<h3 id="_44">完全饱和模型（三阶交互）<a class="headerlink" href="#_44" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">model1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">glm</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">s</span><span class="o">*</span><span class="n">e</span><span class="o">*</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">family</span><span class="o">=</span><span class="n">poisson</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">acc.dat</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="_50">二阶交互模型<a class="headerlink" href="#_50" title="Permanent link">&para;</a></h3>
+<h3 id="_45">二阶交互模型<a class="headerlink" href="#_45" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">model2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">glm</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">s</span><span class="o">*</span><span class="n">e</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">s</span><span class="o">*</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="o">*</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">family</span><span class="o">=</span><span class="n">poisson</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">acc.dat</span><span class="p">)</span>
 </code></pre></div>
 <p>比较model1和model2：
 <div class="highlight"><pre><span></span><code><span class="m">1</span><span class="o">-</span><span class="nf">pchisq</span><span class="p">(</span><span class="n">model2</span><span class="o">$</span><span class="n">deviance</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">model1</span><span class="o">$</span><span class="n">deviance</span><span class="p">,</span><span class="w"> </span><span class="n">model2</span><span class="o">$</span><span class="n">df.residual</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">model1</span><span class="o">$</span><span class="n">df.residual</span><span class="p">)</span>
 </code></pre></div></p>
-<h3 id="_51">简化模型分析<a class="headerlink" href="#_51" title="Permanent link">&para;</a></h3>
+<h3 id="_46">简化模型分析<a class="headerlink" href="#_46" title="Permanent link">&para;</a></h3>
 <h4 id="ei">移除e*i交互项<a class="headerlink" href="#ei" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="n">model3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">glm</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">s</span><span class="o">*</span><span class="n">e</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">s</span><span class="o">*</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">family</span><span class="o">=</span><span class="n">poisson</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">acc.dat</span><span class="p">)</span>
 </code></pre></div>
@@ -2499,14 +2464,14 @@
 <h4 id="se">移除s*e交互项<a class="headerlink" href="#se" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="n">model5</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">glm</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">s</span><span class="o">*</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="o">*</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">family</span><span class="o">=</span><span class="n">poisson</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">acc.dat</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="_52">结论<a class="headerlink" href="#_52" title="Permanent link">&para;</a></h2>
+<h2 id="_47">结论<a class="headerlink" href="#_47" title="Permanent link">&para;</a></h2>
 <ol>
 <li>二阶交互模型足以解释数据（与完全饱和模型相比没有显著差异）</li>
 <li>所有二阶交互项都是重要的，不能进一步简化模型</li>
 <li>安全带使用、弹出情况和伤害程度之间存在复杂的相互作用关系</li>
 </ol>
 <h1 id="31">3.1 癫痫试验分析<a class="headerlink" href="#31" title="Permanent link">&para;</a></h1>
-<h2 id="_53">数据准备<a class="headerlink" href="#_53" title="Permanent link">&para;</a></h2>
+<h2 id="_48">数据准备<a class="headerlink" href="#_48" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># 加载MASS包并读取数据</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">MASS</span><span class="p">)</span>
 <span class="n">epi.dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.table</span><span class="p">(</span><span class="s">&quot;data/epi.dat&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
@@ -2515,8 +2480,8 @@
 <span class="n">epi.dat</span><span class="o">$</span><span class="n">treatf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="n">epi.dat</span><span class="o">$</span><span class="n">treat</span><span class="p">)</span>
 <span class="n">epi.dat</span><span class="o">$</span><span class="n">treatft</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">C</span><span class="p">(</span><span class="n">epi.dat</span><span class="o">$</span><span class="n">treatf</span><span class="p">,</span><span class="w"> </span><span class="n">treatment</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="_54">模型分析<a class="headerlink" href="#_54" title="Permanent link">&para;</a></h2>
-<h3 id="_55">泊松回归模型<a class="headerlink" href="#_55" title="Permanent link">&para;</a></h3>
+<h2 id="_49">模型分析<a class="headerlink" href="#_49" title="Permanent link">&para;</a></h2>
+<h3 id="_50">泊松回归模型<a class="headerlink" href="#_50" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">poisson1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">glm</span><span class="p">(</span><span class="n">yi1</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatft</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">prior</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">epi.dat</span><span class="p">,</span><span class="w"> </span><span class="n">family</span><span class="o">=</span><span class="n">poisson</span><span class="p">)</span>
 </code></pre></div>
 <p>主要发现：
@@ -2524,7 +2489,7 @@
 - 处理效应 = -0.2047 (p = 0.0222)
 - 先前发作次数效应 = 0.0254 (p &lt; 0.001)
 - 年龄效应 = 0.0325 (p &lt; 0.001)</p>
-<h3 id="_56">残差分析<a class="headerlink" href="#_56" title="Permanent link">&para;</a></h3>
+<h3 id="_51">残差分析<a class="headerlink" href="#_51" title="Permanent link">&para;</a></h3>
 <p><div class="highlight"><pre><span></span><code><span class="c1"># 构建偏差残差图</span>
 <span class="n">epi.dat</span><span class="o">$</span><span class="n">rdeviance1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">residuals.glm</span><span class="p">(</span><span class="n">poisson1</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;deviance&quot;</span><span class="p">)</span>
 <span class="n">epi.dat</span><span class="o">$</span><span class="n">fitted.values1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">poisson1</span><span class="o">$</span><span class="n">fitted.values</span>
@@ -2535,7 +2500,7 @@
 <span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
 </code></pre></div>
 <img alt="deviance residual plots" src="../GLM_3.1.1.png" /></p>
-<h3 id="_57">数据探索<a class="headerlink" href="#_57" title="Permanent link">&para;</a></h3>
+<h3 id="_52">数据探索<a class="headerlink" href="#_52" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="c1"># 按处理组计算均值和方差</span>
 <span class="nf">by</span><span class="p">(</span><span class="n">epi.dat</span><span class="o">$</span><span class="n">yi1</span><span class="p">,</span><span class="w"> </span><span class="n">epi.dat</span><span class="o">$</span><span class="n">treatft</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="p">)</span>
 <span class="nf">by</span><span class="p">(</span><span class="n">epi.dat</span><span class="o">$</span><span class="n">yi1</span><span class="p">,</span><span class="w"> </span><span class="n">epi.dat</span><span class="o">$</span><span class="n">treatft</span><span class="p">,</span><span class="w"> </span><span class="n">var</span><span class="p">)</span>
@@ -2543,15 +2508,15 @@
 <p>结果：
 - 控制组：均值 = 9.357143，方差 = 102.7566
 - 处理组：均值 = 8.580645，方差 = 332.7183</p>
-<h3 id="_58">负二项回归模型<a class="headerlink" href="#_58" title="Permanent link">&para;</a></h3>
+<h3 id="_53">负二项回归模型<a class="headerlink" href="#_53" title="Permanent link">&para;</a></h3>
 <p><div class="highlight"><pre><span></span><code><span class="n">negbin2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">glm.nb</span><span class="p">(</span><span class="n">yi1</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatft</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">prior</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">epi.dat</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="o">=</span><span class="n">log</span><span class="p">,</span><span class="w"> </span><span class="n">init.theta</span><span class="o">=</span><span class="m">1.00</span><span class="p">)</span>
 </code></pre></div>
 残差图：
 <img alt="deviance residual plots" src="../GLM_3.1.2.png" /></p>
-<h3 id="_59">简化负二项模型<a class="headerlink" href="#_59" title="Permanent link">&para;</a></h3>
+<h3 id="_54">简化负二项模型<a class="headerlink" href="#_54" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">negbin3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">glm.nb</span><span class="p">(</span><span class="n">yi1</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatft</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">epi.dat</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="o">=</span><span class="n">log</span><span class="p">,</span><span class="w"> </span><span class="n">init.theta</span><span class="o">=</span><span class="m">1.00</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="_60">结论<a class="headerlink" href="#_60" title="Permanent link">&para;</a></h2>
+<h2 id="_55">结论<a class="headerlink" href="#_55" title="Permanent link">&para;</a></h2>
 <ol>
 <li>数据显示明显的过度离散现象（方差远大于均值）</li>
 <li>负二项回归模型比泊松回归更适合这种过度离散的数据</li>
