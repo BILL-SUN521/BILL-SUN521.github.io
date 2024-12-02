@@ -2226,8 +2226,8 @@
 <span class="nf">plot</span><span class="p">(</span><span class="n">fv1</span><span class="p">,</span><span class="w"> </span><span class="n">rd1</span><span class="p">,</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-3</span><span class="p">,</span><span class="m">3</span><span class="p">))</span>
 <span class="nf">points</span><span class="p">(</span><span class="n">fv1</span><span class="p">,</span><span class="w"> </span><span class="n">rp1</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
 </code></pre></div>
-<p>残差图:<img alt="GLM_1.2" src="D:\研究生\研一\试验设计与观察性研究\GLM_1.2.png" /></p>
-<p><img alt="Residuals Plotted Against Fitted Values" src="D:/研究生/研一/试验设计与观察性研究/GLM_1.2.png" /></p>
+<p>残差图:</p>
+<p><img alt="Residuals GLM_1 Against Fitted Values" src="../GLM_1.2.png" /></p>
 <h3 id="_9">简化模型比较<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
 <h4 id="_10">仅包含年龄的模型<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="n">model2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">glm</span><span class="p">(</span><span class="n">resp</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">ageft</span><span class="p">,</span><span class="w"> </span><span class="n">family</span><span class="o">=</span><span class="nf">binomial</span><span class="p">(</span><span class="n">link</span><span class="o">=</span><span class="n">logit</span><span class="p">),</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">neuro.dat</span><span class="p">)</span>
