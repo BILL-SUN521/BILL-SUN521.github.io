@@ -2523,6 +2523,85 @@
 <li>处理效应显著，但需要控制先前发作次数和年龄的影响</li>
 <li>残差分析显示模型拟合情况良好</li>
 </ol>
+<h1 id="_56">线性混合效应模型<a class="headerlink" href="#_56" title="Permanent link">&para;</a></h1>
+<h2 id="bodyweight">BodyWeight数据集的分析<a class="headerlink" href="#bodyweight" title="Permanent link">&para;</a></h2>
+<h3 id="1">1. 数据准备<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># 创建处理组的指示变量</span>
+<span class="n">X1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ifelse</span><span class="p">(</span><span class="n">Diet</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">)</span>
+<span class="n">X2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ifelse</span><span class="p">(</span><span class="n">Diet</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">)</span>
+<span class="n">X3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ifelse</span><span class="p">(</span><span class="n">Diet</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">)</span>
+
+<span class="c1"># 创建时间与处理组的交互项</span>
+<span class="n">time.X1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Time</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">X1</span>
+<span class="n">time.X2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Time</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">X2</span>
+<span class="n">time.X3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Time</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">X3</span>
+
+<span class="c1"># 合并数据</span>
+<span class="n">BodyWeight</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">data.frame</span><span class="p">(</span><span class="n">BodyWeight</span><span class="p">,</span><span class="w"> </span><span class="n">X1</span><span class="p">,</span><span class="w"> </span><span class="n">X2</span><span class="p">,</span><span class="w"> </span><span class="n">X3</span><span class="p">,</span><span class="w"> </span><span class="n">time.X1</span><span class="p">,</span><span class="w"> </span><span class="n">time.X2</span><span class="p">,</span><span class="w"> </span><span class="n">time.X3</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="2">2. 模型拟合<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<h4 id="21-">2.1 随机截距-随机斜率模型<a class="headerlink" href="#21-" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">BodyWeight.lme1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">-1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">X1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">X2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">X3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.X1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.X2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.X3</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Time</span><span class="o">|</span><span class="w"> </span><span class="n">Rat</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BodyWeight</span><span class="p">)</span>
+</code></pre></div>
+<p>主要结果：
+- 固定效应：
+  * 组1基线: 251.65 (p &lt; 0.001)
+  * 组2基线: 452.32 (p &lt; 0.001)
+  * 组3基线: 503.72 (p &lt; 0.001)
+  * 组1时间斜率: 0.36 (p &lt; 0.001)
+  * 组2时间斜率: 0.97 (p &lt; 0.001)
+  * 组3时间斜率: 0.66 (p &lt; 0.001)
+- 随机效应：
+  * 截距标准差: 36.94
+  * 时间斜率标准差: 0.25
+  * 相关系数: -0.149</p>
+<h4 id="22">2.2 随机截距模型<a class="headerlink" href="#22" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">BodyWeight.lme2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">-1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">X1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">X2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">X3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.X1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.X2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.X3</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Rat</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BodyWeight</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="3_1">3. 模型诊断<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h3>
+<h4 id="31_1">3.1 残差分析<a class="headerlink" href="#31_1" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># 残差图</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">BodyWeight.lme1</span><span class="p">,</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;p&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="nf">fitted</span><span class="p">(</span><span class="n">.</span><span class="p">),</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.</span><span class="m">01</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">BodyWeight.lme1</span><span class="p">,</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;p&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="nf">fitted</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Diet</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.</span><span class="m">01</span><span class="p">)</span>
+
+<span class="c1"># 自相关函数图</span>
+<span class="nf">plot</span><span class="p">(</span><span class="nf">ACF</span><span class="p">(</span><span class="n">BodyWeight.lme1</span><span class="p">,</span><span class="w"> </span><span class="n">maxLag</span><span class="o">=</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">alpha</span><span class="o">=</span><span class="n">.</span><span class="m">01</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="32">3.2 拟合值分析<a class="headerlink" href="#32" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># 观测值vs拟合值</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">BodyWeight.lme1</span><span class="p">,</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="nf">fitted</span><span class="p">(</span><span class="n">.</span><span class="p">),</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="n">.</span><span class="m">05</span><span class="p">,</span><span class="w"> </span><span class="n">abline</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">BodyWeight.lme1</span><span class="p">,</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="nf">fitted</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Diet</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="n">.</span><span class="m">05</span><span class="p">,</span><span class="w"> </span><span class="n">abline</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">BodyWeight.lme1</span><span class="p">,</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="nf">fitted</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Rat</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="n">.</span><span class="m">05</span><span class="p">,</span><span class="w"> </span><span class="n">abline</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+</code></pre></div>
+<h4 id="33">3.3 正态性检验<a class="headerlink" href="#33" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># 残差Q-Q图</span>
+<span class="nf">qqnorm</span><span class="p">(</span><span class="n">BodyWeight.lme1</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="n">.</span><span class="p">),</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="n">.</span><span class="m">05</span><span class="p">)</span>
+
+<span class="c1"># 随机效应Q-Q图</span>
+<span class="nf">qqnorm</span><span class="p">(</span><span class="n">BodyWeight.lme1</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="nf">ranef</span><span class="p">(</span><span class="n">.</span><span class="p">),</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="n">.</span><span class="m">05</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="4">4. 预测分析<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># 创建预测数据框</span>
+<span class="n">lme1.predict.df</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">data.frame</span><span class="p">(</span>
+<span class="w">    </span><span class="n">Rat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">9</span><span class="p">,</span><span class="m">13</span><span class="p">),</span><span class="w"> </span><span class="n">each</span><span class="o">=</span><span class="m">2</span><span class="p">),</span><span class="w"> </span>
+<span class="w">    </span><span class="n">Diet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">each</span><span class="o">=</span><span class="m">2</span><span class="p">),</span><span class="w"> </span>
+<span class="w">    </span><span class="n">Time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">30</span><span class="p">,</span><span class="m">50</span><span class="p">),</span><span class="w"> </span><span class="m">3</span><span class="p">),</span>
+<span class="w">    </span><span class="c1"># ... 其他预测变量 ...</span>
+<span class="p">)</span>
+
+<span class="c1"># 生成预测值</span>
+<span class="nf">predict</span><span class="p">(</span><span class="n">BodyWeight.lme1</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lme1.predict.df</span><span class="p">,</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+</code></pre></div>
+<h3 id="5">5. 主要结论<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<ol>
+<li>三个处理组都显示显著的时间效应</li>
+<li>组间存在显著的基线差异</li>
+<li>随机效应显示个体间存在较大变异</li>
+<li>模型诊断显示拟合良好</li>
+<li>残差分析未发现明显的异常模式</li>
+</ol>
 
 
 
